@@ -1,0 +1,2309 @@
+
+<action>
+**MessageAction** (source=EventSource.AGENT)
+CONTENT: Received, I'll enhance your Quantara Markets platform with institutional-grade design, real API integrations, and AI committee improvements. Let me analyze your uploaded files and start building.
+</action>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5 is successful.]
+Here's the files and directories up to 2 levels deep in /workspace/app-bqfaw566pqf5, excluding hidden:
+/workspace/app-bqfaw566pqf5
+/workspace/app-bqfaw566pqf5/tasks
+/workspace/app-bqfaw566pqf5/tasks/AICommitteeUI2.tsx
+/workspace/app-bqfaw566pqf5/tasks/LeftNavNew.tsx
+/workspace/app-bqfaw566pqf5/tasks/HomeUI2.tsx
+/workspace/app-bqfaw566pqf5/tasks/README.md
+/workspace/app-bqfaw566pqf5/tasks/debate_engine.py
+
+
+</observation>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5/tasks/AICommitteeUI2.tsx', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5/tasks/AICommitteeUI2.tsx is successful.]
+Here's the result of running `cat -n` on the file: /workspace/app-bqfaw566pqf5/tasks/AICommitteeUI2.tsx:
+     1 /**
+     2  * AI Investment Committee Page
+     3  * Professional institutional-grade adversarial AI debate system
+     4  */
+     5 import React, { useState, useEffect } from 'react';
+     6 import { useParams, useNavigate } from 'react-router-dom';
+     7 
+     8 const T = {
+     9   brand: '#2962FF', brandLt: '#5B8DEF', brandDk: '#1E4FCC',
+    10   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39', bg4: '#363A45',
+    11   border0: '#1E222D', border1: '#2A2E39', border2: '#363A45',
+    12   text0: '#FFF', text1: '#D1D4DC', text2: '#787B86', text3: '#50535E',
+    13   up: '#26A69A', dn: '#EF5350', upBg: 'rgba(38,166,154,0.12)', dnBg: 'rgba(239,83,80,0.12)',
+    14   warn: '#FF9800', warnBg: 'rgba(255,152,0,0.12)',
+    15   fontSans: "'Inter','Segoe UI',system-ui,sans-serif",
+    16   fontMono: "'JetBrains Mono','Fira Code',monospace",
+    17   radius: '6px',
+    18 };
+    19 
+    20 const TOP_ASSETS = [
+    21   'TSLA', 'NVDA', 'AAPL', 'MSFT', 'AMZN', 'META', 'GOOG', 'BTC-USD', 'XAUUSD', 'MASI'
+    22 ];
+    23 
+    24 const SAMPLE_DEBATES: Record<string, any> = {
+    25   'TSLA': {
+    26     bull: {
+    27       confidence: 0.78,
+    28       thesis: 'Strong AI-driven vehicle demand, improving margins, and expanding Supercharger network.',
+    29       catalysts: ['AI chip integration', 'Cybertruck production ramp', 'China sales recovery', 'Energy storage growth'],
+    30     },
+    31     bear: {
+    32       confidence: 0.54,
+    33       thesis: 'Valuation stretched relative to auto peers, rising competition in EV space.',
+    34       risks: ['Price compression', 'Regulatory headwinds', 'Delivery volatility', 'Margin pressure'],
+    35     },
+    36     judge: {
+    37       verdict: 'BUY WITH CAUTION',
+    38       confidence: 0.72,
+    39       rationale: 'Positive momentum driven by AI optimism and delivery growth, but valuation remains stretched relative to automotive peers.',
+    40       riskFlags: ['Valuation', 'Competition'],
+    41     },
+    42   },
+    43   'NVDA': {
+    44     bull: {
+    45       confidence: 0.85,
+    46       thesis: 'Dominant position in AI accelerators, insatiable cloud demand, and software ecosystem.',
+    47       catalysts: ['H100/H200 demand', 'CUDA moat', 'Data center growth', 'Generative AI tailwinds'],
+    48     },
+    49     bear: {
+    50       confidence: 0.48,
+    51       thesis: 'AI bubble risk, supply chain constraints, and valuation extremes.',
+    52       risks: ['Valuation bubble', 'Competition from AMD/Intel', 'Order cancellations', 'Macro sensitivity'],
+    53     },
+    54     judge: {
+    55       verdict: 'CONVICTION BUY',
+    56       confidence: 0.88,
+    57       rationale: 'Bull case is significantly stronger with dominant market share in AI training and inference.',
+    58       riskFlags: ['Valuation'],
+    59     },
+    60   },
+    61   'AAPL': {
+    62     bull: {
+    63       confidence: 0.62,
+    64       thesis: 'Services growth, iPhone ecosystem stickiness, and capital return program.',
+    65       catalysts: ['Services revenue', 'Share buybacks', 'Installed base', 'Vision Pro potential'],
+    66     },
+    67     bear: {
+    68       confidence: 0.58,
+    69       thesis: 'iPhone saturation, China risks, and limited near-term catalysts.',
+    70       risks: ['China exposure', 'Smartphone saturation', 'Regulatory antitrust', 'Services growth deceleration'],
+    71     },
+    72     judge: {
+    73       verdict: 'HOLD',
+    74       confidence: 0.65,
+    75       rationale: 'Balanced arguments with stable but unspectacular outlook.',
+    76       riskFlags: ['China', 'Saturation'],
+    77     },
+    78   },
+    79 };
+    80 
+    81 export default function AICommitteeUI2() {
+    82   const [selectedAsset, setSelectedAsset] = useState('TSLA');
+    83   const [loading, setLoading] = useState(false);
+    84   const [debate, setDebate] = useState(SAMPLE_DEBATES['TSLA']);
+    85 
+    86   const navigate = useNavigate();
+    87 
+    88   useEffect(() => {
+    89     if (SAMPLE_DEBATES[selectedAsset]) {
+    90       setLoading(true);
+    91       const timer = setTimeout(() => {
+    92         setDebate(SAMPLE_DEBATES[selectedAsset]);
+    93         setLoading(false);
+    94       }, 800);
+    95       return () => clearTimeout(timer);
+    96     }
+    97   }, [selectedAsset]);
+    98 
+    99   const getVerdictColor = (verdict: string) => {
+   100     if (verdict.includes('BUY')) return T.up;
+   101     if (verdict.includes('SELL')) return T.dn;
+   102     return T.warn;
+   103   };
+   104 
+   105   const getVerdictBg = (verdict: string) => {
+   106     if (verdict.includes('BUY')) return T.upBg;
+   107     if (verdict.includes('SELL')) return T.dnBg;
+   108     return T.warnBg;
+   109   };
+   110 
+   111   return (
+   112     <div style={{
+   113       height: '100%',
+   114       background: T.bg0,
+   115       color: T.text1,
+   116       fontFamily: T.fontSans,
+   117       display: 'flex',
+   118       flexDirection: 'column',
+   119       overflow: 'hidden',
+   120     }}>
+   121       {/* Top Bar */}
+   122       <div style={{
+   123         background: T.bg1,
+   124         borderBottom: `1px solid ${T.border0}`,
+   125         padding: '12px 20px',
+   126         display: 'flex',
+   127         alignItems: 'center',
+   128         justifyContent: 'space-between',
+   129       }}>
+   130         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+   131           <div style={{ cursor: 'pointer' }} onClick={() => navigate('/ui2/dashboard')}>
+   132             <span style={{ fontSize: '12px', color: T.text3 }}>← Dashboard</span>
+   133           </div>
+   134           <div>
+   135             <div style={{ fontSize: '10px', fontWeight: 700, color: T.text3, textTransform: 'uppercase', letterSpacing: '1px' }}>
+   136               QUANTARA MARKETS
+   137             </div>
+   138             <div style={{ fontSize: '16px', fontWeight: 800, color: T.text0, fontFamily: T.fontMono }}>
+   139               AI INVESTMENT COMMITTEE
+   140             </div>
+   141           </div>
+   142         </div>
+   143 
+   144         {/* Asset Selector */}
+   145         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+   146           <span style={{ fontSize: '11px', color: T.text3 }}>Select Asset:</span>
+   147           <select
+   148             value={selectedAsset}
+   149             onChange={(e) => setSelectedAsset(e.target.value)}
+   150             style={{
+   151               background: T.bg2,
+   152               border: `1px solid ${T.border1}`,
+   153               borderRadius: T.radius,
+   154               padding: '6px 10px',
+   155               color: T.text0,
+   156               fontSize: '12px',
+   157               fontFamily: T.fontMono,
+   158               outline: 'none',
+   159             }}
+   160           >
+   161             {TOP_ASSETS.map((a) => (
+   162               <option key={a} value={a}>{a}</option>
+   163             ))}
+   164           </select>
+   165           <button
+   166             style={{
+   167               background: T.brand,
+   168               border: 'none',
+   169               borderRadius: T.radius,
+   170               padding: '6px 14px',
+   171               color: '#fff',
+   172               fontSize: '11px',
+   173               fontWeight: 700,
+   174               cursor: 'pointer',
+   175               fontFamily: T.fontSans,
+   176             }}
+   177             onClick={() => {
+   178               setLoading(true);
+   179               setTimeout(() => {
+   180                 setLoading(false);
+   181               }, 1500);
+   182             }}
+   183           >
+   184             {loading ? 'Deliberating...' : 'Rerun Debate'}
+   185           </button>
+   186         </div>
+   187       </div>
+   188 
+   189       {/* Main Content */}
+   190       <div style={{
+   191         flex: 1,
+   192         padding: '16px',
+   193         display: 'grid',
+   194         gridTemplateColumns: '1fr auto 1fr',
+   195         gap: '16px',
+   196         overflow: 'hidden',
+   197       }}>
+   198         {/* Bull Agent Panel */}
+   199         <div style={{
+   200           display: 'flex',
+   201           flexDirection: 'column',
+   202           gap: '12px',
+   203           overflow: 'hidden',
+   204         }}>
+   205           <div style={{
+   206             background: `${T.up}11`,
+   207             border: `1px solid ${T.up}44`,
+   208             borderRadius: '10px',
+   209             padding: '16px',
+   210           }}>
+   211             <div style={{
+   212               display: 'flex',
+   213               alignItems: 'center',
+   214               justifyContent: 'space-between',
+   215               marginBottom: '12px',
+   216             }}>
+   217               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+   218                 <div style={{
+   219                   width: '40px',
+   220                   height: '40px',
+   221                   borderRadius: '50%',
+   222                   background: T.up,
+   223                   display: 'flex',
+   224                   alignItems: 'center',
+   225                   justifyContent: 'center',
+   226                   fontSize: '18px',
+   227                   color: '#fff',
+   228                 }}>
+   229                   🟢
+   230                 </div>
+   231                 <div>
+   232                   <div style={{ fontSize: '13px', fontWeight: 700, color: T.text0 }}>
+   233                     BULL AGENT
+   234                   </div>
+   235                   <div style={{ fontSize: '11px', color: T.text3 }}>
+   236                     Optimist • Catalyst Hunter
+   237                   </div>
+   238                 </div>
+   239               </div>
+   240               <div style={{ textAlign: 'right' }}>
+   241                 <div style={{ fontSize: '24px', fontWeight: 800, color: T.up, fontFamily: T.fontMono }}>
+   242                   {(debate.bull.confidence * 100).toFixed(0)}%
+   243                 </div>
+   244                 <div style={{ fontSize: '10px', color: T.text3 }}>Confidence</div>
+   245               </div>
+   246             </div>
+   247 
+   248             {/* Confidence Bar */}
+   249             <div style={{
+   250               background: T.bg3,
+   251               height: '8px',
+   252               borderRadius: '4px',
+   253               overflow: 'hidden',
+   254               marginBottom: '14px',
+   255             }}>
+   256               <div style={{
+   257                 width: `${debate.bull.confidence * 100}%`,
+   258                 height: '100%',
+   259                 background: T.up,
+   260                 transition: 'width 0.5s ease',
+   261               }} />
+   262             </div>
+   263 
+   264             <div style={{
+   265               fontSize: '12px',
+   266               color: T.text1,
+   267               lineHeight: '1.6',
+   268               marginBottom: '14px',
+   269             }}>
+   270               {debate.bull.thesis}
+   271             </div>
+   272 
+   273             <div>
+   274               <div style={{
+   275                 fontSize: '10px',
+   276                 fontWeight: 700,
+   277                 textTransform: 'uppercase',
+   278                 letterSpacing: '1px',
+   279                 color: T.up,
+   280                 marginBottom: '8px',
+   281               }}>
+   282                 CATALYSTS
+   283               </div>
+   284               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+   285                 {debate.bull.catalysts.map((c: string, i: number) => (
+   286                   <div
+   287                     key={i}
+   288                     style={{
+   289                       background: T.bg3,
+   290                       border: `1px solid ${T.up}33`,
+   291                       borderRadius: '12px',
+   292                       padding: '4px 10px',
+   293                       fontSize: '11px',
+   294                       color: T.text1,
+   295                     }}
+   296                   >
+   297                     {c}
+   298                   </div>
+   299                 ))}
+   300               </div>
+   301             </div>
+   302           </div>
+   303         </div>
+   304 
+   305         {/* Judge Panel */}
+   306         <div style={{
+   307           display: 'flex',
+   308           flexDirection: 'column',
+   309           gap: '12px',
+   310           width: '360px',
+   311         }}>
+   312           <div style={{
+   313             background: T.bg1,
+   314             border: `1px solid ${T.border1}`,
+   315             borderRadius: '10px',
+   316             padding: '20px',
+   317             flex: 1,
+   318             display: 'flex',
+   319             flexDirection: 'column',
+   320           }}>
+   321             <div style={{
+   322               textAlign: 'center',
+   323               marginBottom: '16px',
+   324             }}>
+   325               <div style={{
+   326                 width: '56px',
+   327                 height: '56px',
+   328                 borderRadius: '50%',
+   329                 background: T.brand,
+   330                 display: 'flex',
+   331                 alignItems: 'center',
+   332                 justifyContent: 'center',
+   333                 fontSize: '24px',
+   334                 color: '#fff',
+   335                 margin: '0 auto 12px',
+   336               }}>
+   337                 ⚖️
+   338               </div>
+   339               <div style={{ fontSize: '13px', fontWeight: 700, color: T.text0 }}>
+   340                 JUDGE AGENT
+   341               </div>
+   342               <div style={{ fontSize: '11px', color: T.text3 }}>
+   343                 Investment Committee Chair
+   344               </div>
+   345             </div>
+   346 
+   347             {/* Verdict */}
+   348             <div style={{
+   349               background: getVerdictBg(debate.judge.verdict),
+   350               border: `1px solid ${getVerdictColor(debate.judge.verdict)}`,
+   351               borderRadius: '8px',
+   352               padding: '16px',
+   353               textAlign: 'center',
+   354               marginBottom: '16px',
+   355             }}>
+   356               <div style={{
+   357                 fontSize: '10px',
+   358                 fontWeight: 700,
+   359                 textTransform: 'uppercase',
+   360                 letterSpacing: '1px',
+   361                 color: T.text3,
+   362                 marginBottom: '6px',
+   363               }}>
+   364                 FINAL VERDICT
+   365               </div>
+   366               <div style={{
+   367                 fontSize: '20px',
+   368                 fontWeight: 800,
+   369                 color: getVerdictColor(debate.judge.verdict),
+   370                 fontFamily: T.fontMono,
+   371                 textTransform: 'uppercase',
+   372                 marginBottom: '8px',
+   373               }}>
+   374                 {debate.judge.verdict}
+   375               </div>
+   376               <div style={{
+   377                 fontSize: '14px',
+   378                 fontWeight: 600,
+   379                 color: T.text2,
+   380               }}>
+   381                 Confidence: {(debate.judge.confidence * 100).toFixed(0)}%
+   382               </div>
+   383             </div>
+   384 
+   385             {/* Rationale */}
+   386             <div style={{ flex: 1, overflowY: 'auto' }}>
+   387               <div style={{
+   388                 fontSize: '10px',
+   389                 fontWeight: 700,
+   390                 textTransform: 'uppercase',
+   391                 letterSpacing: '1px',
+   392                 color: T.text3,
+   393                 marginBottom: '8px',
+   394               }}>
+   395                 RATIONALE
+   396               </div>
+   397               <div style={{
+   398                 fontSize: '12px',
+   399                 color: T.text1,
+   400                 lineHeight: '1.6',
+   401                 marginBottom: '16px',
+   402               }}>
+   403                 {debate.judge.rationale}
+   404               </div>
+   405 
+   406               <div style={{
+   407                 fontSize: '10px',
+   408                 fontWeight: 700,
+   409                 textTransform: 'uppercase',
+   410                 letterSpacing: '1px',
+   411                 color: T.text3,
+   412                 marginBottom: '8px',
+   413               }}>
+   414                 RISK FLAGS
+   415               </div>
+   416               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+   417                 {debate.judge.riskFlags.map((r: string, i: number) => (
+   418                   <div
+   419                     key={i}
+   420                     style={{
+   421                       background: T.warnBg,
+   422                       border: `1px solid ${T.warn}33`,
+   423                       borderRadius: '12px',
+   424                       padding: '4px 10px',
+   425                       fontSize: '11px',
+   426                       color: T.warn,
+   427                     }}
+   428                   >
+   429                     ⚠️ {r}
+   430                   </div>
+   431                 ))}
+   432               </div>
+   433             </div>
+   434           </div>
+   435         </div>
+   436 
+   437         {/* Bear Agent Panel */}
+   438         <div style={{
+   439           display: 'flex',
+   440           flexDirection: 'column',
+   441           gap: '12px',
+   442           overflow: 'hidden',
+   443         }}>
+   444           <div style={{
+   445             background: `${T.dn}11`,
+   446             border: `1px solid ${T.dn}44`,
+   447             borderRadius: '10px',
+   448             padding: '16px',
+   449           }}>
+   450             <div style={{
+   451               display: 'flex',
+   452               alignItems: 'center',
+   453               justifyContent: 'space-between',
+   454               marginBottom: '12px',
+   455             }}>
+   456               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+   457                 <div style={{
+   458                   width: '40px',
+   459                   height: '40px',
+   460                   borderRadius: '50%',
+   461                   background: T.dn,
+   462                   display: 'flex',
+   463                   alignItems: 'center',
+   464                   justifyContent: 'center',
+   465                   fontSize: '18px',
+   466                   color: '#fff',
+   467                 }}>
+   468                   🔴
+   469                 </div>
+   470                 <div>
+   471                   <div style={{ fontSize: '13px', fontWeight: 700, color: T.text0 }}>
+   472                     BEAR AGENT
+   473                   </div>
+   474                   <div style={{ fontSize: '11px', color: T.text3 }}>
+   475                     Pessimist • Risk Analyst
+   476                   </div>
+   477                 </div>
+   478               </div>
+   479               <div style={{ textAlign: 'right' }}>
+   480                 <div style={{ fontSize: '24px', fontWeight: 800, color: T.dn, fontFamily: T.fontMono }}>
+   481                   {(debate.bear.confidence * 100).toFixed(0)}%
+   482                 </div>
+   483                 <div style={{ fontSize: '10px', color: T.text3 }}>Confidence</div>
+   484               </div>
+   485             </div>
+   486 
+   487             {/* Confidence Bar */}
+   488             <div style={{
+   489               background: T.bg3,
+   490               height: '8px',
+   491               borderRadius: '4px',
+   492               overflow: 'hidden',
+   493               marginBottom: '14px',
+   494             }}>
+   495               <div style={{
+   496                 width: `${debate.bear.confidence * 100}%`,
+   497                 height: '100%',
+   498                 background: T.dn,
+   499                 transition: 'width 0.5s ease',
+   500               }} />
+   501             </div>
+   502 
+   503             <div style={{
+   504               fontSize: '12px',
+   505               color: T.text1,
+   506               lineHeight: '1.6',
+   507               marginBottom: '14px',
+   508             }}>
+   509               {debate.bear.thesis}
+   510             </div>
+   511 
+   512             <div>
+   513               <div style={{
+   514                 fontSize: '10px',
+   515                 fontWeight: 700,
+   516                 textTransform: 'uppercase',
+   517                 letterSpacing: '1px',
+   518                 color: T.dn,
+   519                 marginBottom: '8px',
+   520               }}>
+   521                 RISKS
+   522               </div>
+   523               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+   524                 {debate.bear.risks.map((r: string, i: number) => (
+   525                   <div
+   526                     key={i}
+   527                     style={{
+   528                       background: T.bg3,
+   529                       border: `1px solid ${T.dn}33`,
+   530                       borderRadius: '12px',
+   531                       padding: '4px 10px',
+   532                       fontSize: '11px',
+   533                       color: T.text1,
+   534                     }}
+   535                   >
+   536                     {r}
+   537                   </div>
+   538                 ))}
+   539               </div>
+   540             </div>
+   541           </div>
+   542         </div>
+   543       </div>
+   544     </div>
+   545   );
+   546 }
+   547 
+
+
+</observation>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5/tasks/HomeUI2.tsx', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5/tasks/HomeUI2.tsx is successful.]
+Here's the result of running `cat -n` on the file: /workspace/app-bqfaw566pqf5/tasks/HomeUI2.tsx:
+     1 /**
+     2  * Home Page — Quantara Markets
+     3  * Hero section with AI-powered financial intelligence platform
+     4  */
+     5 import React, { useEffect, useState } from 'react';
+     6 import { useNavigate } from 'react-router-dom';
+     7 
+     8 const T = {
+     9   brand: '#2962FF', brandLt: '#5B8DEF', brandDk: '#1E4FCC',
+    10   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39',
+    11   border0: '#1E222D', border1: '#2A2E39',
+    12   text0: '#FFF', text1: '#D1D4DC', text2: '#787B86', text3: '#50535E',
+    13   up: '#26A69A', dn: '#EF5350', warn: '#FF9800', info: '#42A5F5',
+    14   fontSans: "'Inter','Segoe UI',system-ui,sans-serif",
+    15   fontMono: "'JetBrains Mono','Fira Code',monospace",
+    16   radius: '6px',
+    17 };
+    18 
+    19 const TOP_ASSETS = [
+    20   { symbol: 'TSLA', name: 'Tesla', price: 445.70, change: 2.34, changePct: 0.53 },
+    21   { symbol: 'NVDA', name: 'NVIDIA', price: 225.80, change: -1.25, changePct: -0.55 },
+    22   { symbol: 'AAPL', name: 'Apple', price: 299.23, change: 0.87, changePct: 0.29 },
+    23   { symbol: 'BTC-USD', name: 'Bitcoin', price: 79659.23, change: 452.30, changePct: 0.57 },
+    24   { symbol: 'XAUUSD', name: 'Gold', price: 2345.80, change: 8.50, changePct: 0.36 },
+    25   { symbol: 'MASI', name: 'MASI Index', price: 12260.0, change: -15.20, changePct: -0.12 },
+    26 ];
+    27 
+    28 export default function HomeUI2() {
+    29   const navigate = useNavigate();
+    30   const [tickerIndex, setTickerIndex] = useState(0);
+    31 
+    32   useEffect(() => {
+    33     const id = setInterval(() => {
+    34       setTickerIndex(prev => (prev + 1) % TOP_ASSETS.length);
+    35     }, 2000);
+    36     return () => clearInterval(id);
+    37   }, []);
+    38 
+    39   return (
+    40     <div style={{
+    41       minHeight: '100%',
+    42       background: T.bg0,
+    43       color: T.text1,
+    44       fontFamily: T.fontSans,
+    45       display: 'flex',
+    46       flexDirection: 'column',
+    47     }}>
+    48       {/* Top Bar */}
+    49       <div style={{
+    50         background: T.bg1,
+    51         borderBottom: `1px solid ${T.border0}`,
+    52         padding: '12px 24px',
+    53         display: 'flex',
+    54         alignItems: 'center',
+    55         justifyContent: 'space-between',
+    56       }}>
+    57         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    58           <div style={{
+    59             width: '36px',
+    60             height: '36px',
+    61             background: T.brand,
+    62             borderRadius: '8px',
+    63             display: 'flex',
+    64             alignItems: 'center',
+    65             justifyContent: 'center',
+    66             fontSize: '16px',
+    67             fontWeight: 800,
+    68             color: '#fff',
+    69           }}>
+    70             QM
+    71           </div>
+    72           <div>
+    73             <div style={{ fontSize: '14px', fontWeight: 800, color: T.text0, fontFamily: T.fontMono }}>
+    74               QUANTARA MARKETS
+    75             </div>
+    76             <div style={{ fontSize: '11px', color: T.text3 }}>
+    77               AI-Powered Financial Intelligence
+    78             </div>
+    79           </div>
+    80         </div>
+    81         <div style={{ display: 'flex', gap: '12px' }}>
+    82           <button
+    83             onClick={() => navigate('/ui2/dashboard')}
+    84             style={{
+    85               background: 'transparent',
+    86               border: `1px solid ${T.border1}`,
+    87               borderRadius: T.radius,
+    88               padding: '8px 16px',
+    89               color: T.text1,
+    90               fontSize: '12px',
+    91               fontWeight: 600,
+    92               cursor: 'pointer',
+    93               fontFamily: T.fontSans,
+    94             }}
+    95           >
+    96             Dashboard
+    97           </button>
+    98           <button
+    99             onClick={() => navigate('/ui2/intelligence')}
+   100             style={{
+   101               background: T.brand,
+   102               border: 'none',
+   103               borderRadius: T.radius,
+   104               padding: '8px 18px',
+   105               color: '#fff',
+   106               fontSize: '12px',
+   107               fontWeight: 700,
+   108               cursor: 'pointer',
+   109               fontFamily: T.fontSans,
+   110             }}
+   111           >
+   112             Launch Terminal
+   113           </button>
+   114         </div>
+   115       </div>
+   116 
+   117       {/* Live Ticker */}
+   118       <div style={{
+   119         background: T.bg2,
+   120         borderBottom: `1px solid ${T.border0}`,
+   121         padding: '8px 24px',
+   122         overflow: 'hidden',
+   123         position: 'relative',
+   124       }}>
+   125         <div style={{ display: 'flex', gap: '32px', whiteSpace: 'nowrap', animation: 'ticker 20s linear infinite' }}>
+   126           {TOP_ASSETS.concat(TOP_ASSETS).map((asset, i) => (
+   127             <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+   128               <span style={{ fontFamily: T.fontMono, fontWeight: 700, color: T.text0 }}>
+   129                 {asset.symbol}
+   130               </span>
+   131               <span style={{ fontFamily: T.fontMono, color: T.text2 }}>
+   132                 ${asset.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+   133               </span>
+   134               <span style={{
+   135                 fontFamily: T.fontMono,
+   136                 color: asset.change >= 0 ? T.up : T.dn,
+   137                 fontWeight: 600,
+   138               }}>
+   139                 {asset.change >= 0 ? '▲' : '▼'} {Math.abs(asset.changePct).toFixed(2)}%
+   140               </span>
+   141             </div>
+   142           ))}
+   143         </div>
+   144       </div>
+   145 
+   146       {/* Hero Section */}
+   147       <div style={{
+   148         flex: 1,
+   149         display: 'flex',
+   150         alignItems: 'center',
+   151         justifyContent: 'center',
+   152         padding: '60px 24px',
+   153       }}>
+   154         <div style={{
+   155           maxWidth: '900px',
+   156           textAlign: 'center',
+   157         }}>
+   158           <div style={{
+   159             display: 'inline-flex',
+   160             alignItems: 'center',
+   161             gap: '8px',
+   162             background: `${T.brand}11`,
+   163             border: `1px solid ${T.brand}44`,
+   164             borderRadius: '999px',
+   165             padding: '6px 16px',
+   166             marginBottom: '24px',
+   167           }}>
+   168             <div style={{
+   169               width: '8px',
+   170               height: '8px',
+   171               borderRadius: '50%',
+   172               background: T.up,
+   173               boxShadow: `0 0 12px ${T.up}88`,
+   174             }} />
+   175             <span style={{ fontSize: '11px', fontWeight: 600, color: T.brandLt }}>
+   176               LIVE MARKETS
+   177             </span>
+   178           </div>
+   179 
+   180           <h1 style={{
+   181             fontSize: '52px',
+   182             fontWeight: 800,
+   183             color: T.text0,
+   184             lineHeight: '1.1',
+   185             marginBottom: '16px',
+   186             fontFamily: T.fontMono,
+   187           }}>
+   188             AI-Powered
+   189             <span style={{
+   190               background: `linear-gradient(135deg, ${T.brand} 0%, ${T.brandLt} 100%)`,
+   191               WebkitBackgroundClip: 'text',
+   192               WebkitTextFillColor: 'transparent',
+   193               backgroundClip: 'text',
+   194             }}> Financial Intelligence</span>
+   195           </h1>
+   196 
+   197           <p style={{
+   198             fontSize: '18px',
+   199             color: T.text2,
+   200             maxWidth: '600px',
+   201             margin: '0 auto 32px',
+   202             lineHeight: '1.6',
+   203           }}>
+   204             Real-time market analysis, adversarial AI debate, and institutional-grade financial monitoring.
+   205             Built for traders, researchers, and Moroccan market participants.
+   206           </p>
+   207 
+   208           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '48px' }}>
+   209             <button
+   210               onClick={() => navigate('/ui2/dashboard')}
+   211               style={{
+   212                 background: T.brand,
+   213                 border: 'none',
+   214                 borderRadius: T.radius,
+   215                 padding: '14px 28px',
+   216                 color: '#fff',
+   217                 fontSize: '14px',
+   218                 fontWeight: 700,
+   219                 cursor: 'pointer',
+   220                 fontFamily: T.fontSans,
+   221                 display: 'flex',
+   222                 alignItems: 'center',
+   223                 gap: '8px',
+   224               }}
+   225             >
+   226               🚀 Enter Terminal
+   227             </button>
+   228             <button
+   229               onClick={() => navigate('/ui2/categorized-dashboard')}
+   230               style={{
+   231                 background: 'transparent',
+   232                 border: `1px solid ${T.border1}`,
+   233                 borderRadius: T.radius,
+   234                 padding: '14px 28px',
+   235                 color: T.text1,
+   236                 fontSize: '14px',
+   237                 fontWeight: 600,
+   238                 cursor: 'pointer',
+   239                 fontFamily: T.fontSans,
+   240               }}
+   241             >
+   242               Watch Demo
+   243             </button>
+   244           </div>
+   245 
+   246           {/* Feature Cards */}
+   247           <div style={{
+   248             display: 'grid',
+   249             gridTemplateColumns: '1fr 1fr 1fr',
+   250             gap: '16px',
+   251             marginTop: '32px',
+   252           }}>
+   253             {[
+   254               { icon: '🧠', title: 'AI Investment Committee', desc: 'Bull vs Bear vs Judge institutional-grade debate' },
+   255               { icon: '⚡', title: 'Real-Time Signals', desc: 'Explainable AI signals with 60% sentiment / 40% momentum' },
+   256               { icon: '🇲🇦', title: 'Moroccan Market', desc: 'MASI index & Casablanca Stock Exchange integration' },
+   257             ].map((f, i) => (
+   258               <div
+   259                 key={i}
+   260                 style={{
+   261                   background: T.bg1,
+   262                   border: `1px solid ${T.border0}`,
+   263                   borderRadius: '12px',
+   264                   padding: '20px',
+   265                   textAlign: 'left',
+   266                   cursor: 'pointer',
+   267                   transition: 'transform 0.2s ease, border-color 0.2s ease',
+   268                 }}
+   269                 onClick={() => navigate('/ui2/ai-committee')}
+   270                 onMouseEnter={(e) => {
+   271                   e.currentTarget.style.transform = 'translateY(-2px)';
+   272                   e.currentTarget.style.borderColor = T.brand;
+   273                 }}
+   274                 onMouseLeave={(e) => {
+   275                   e.currentTarget.style.transform = 'translateY(0)';
+   276                   e.currentTarget.style.borderColor = T.border0;
+   277                 }}
+   278               >
+   279                 <div style={{ fontSize: '24px', marginBottom: '8px' }}>{f.icon}</div>
+   280                 <div style={{
+   281                   fontSize: '14px',
+   282                   fontWeight: 700,
+   283                   color: T.text0,
+   284                   marginBottom: '4px',
+   285                 }}>
+   286                   {f.title}
+   287                 </div>
+   288                 <div style={{ fontSize: '12px', color: T.text2 }}>
+   289                   {f.desc}
+   290                 </div>
+   291               </div>
+   292             ))}
+   293           </div>
+   294         </div>
+   295       </div>
+   296 
+   297       <style>{`
+   298         @keyframes ticker {
+   299           0% { transform: translateX(0); }
+   300           100% { transform: translateX(-50%); }
+   301         }
+   302       `}</style>
+   303     </div>
+   304   );
+   305 }
+   306 
+
+
+</observation>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5/tasks/LeftNavNew.tsx', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5/tasks/LeftNavNew.tsx is successful.]
+Here's the result of running `cat -n` on the file: /workspace/app-bqfaw566pqf5/tasks/LeftNavNew.tsx:
+     1 /**
+     2  * Left Navigation — Bloomberg-style
+     3  * Categorized menu with expandable sections
+     4  */
+     5 import React, { useState } from 'react';
+     6 import { useNavigate, useLocation } from 'react-router-dom';
+     7 
+     8 const T = {
+     9   brand: '#2962FF', brandLt: '#5B8DEF', brandDk: '#1E4FCC',
+    10   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39',
+    11   border0: '#1E222D', border1: '#2A2E39',
+    12   text0: '#FFF', text1: '#D1D4DC', text2: '#787B86', text3: '#50535E',
+    13   up: '#26A69A', dn: '#EF5350', warn: '#FF9800',
+    14   fontSans: "'Inter','Segoe UI',system-ui,sans-serif",
+    15   fontMono: "'JetBrains Mono','Fira Code',monospace",
+    16 };
+    17 
+    18 interface NavItem {
+    19   label: string;
+    20   path: string;
+    21   icon?: string;
+    22   badge?: string;
+    23 }
+    24 
+    25 interface NavSection {
+    26   label: string;
+    27   icon: string;
+    28   items: NavItem[];
+    29 }
+    30 
+    31 const NAV_SECTIONS: NavSection[] = [
+    32   {
+    33     label: 'MARKETS',
+    34     icon: '📈',
+    35     items: [
+    36       { label: 'Overview', path: '/ui2/dashboard', icon: '📊' },
+    37       { label: 'US Equities', path: '/ui2/markets/us', icon: '🇺🇸' },
+    38       { label: 'Casablanca Exchange', path: '/ui2/markets/casablanca', icon: '🇲🇦' },
+    39       { label: 'Commodities', path: '/ui2/markets/commodities', icon: '🏭' },
+    40       { label: 'ETFs', path: '/ui2/markets/etfs', icon: '📊' },
+    41       { label: 'Crypto & Blockchain', path: '/ui2/markets/crypto', icon: '🔗' },
+    42       { label: 'Forex', path: '/ui2/markets/forex', icon: '💱' },
+    43     ],
+    44   },
+    45   {
+    46     label: 'AI INTELLIGENCE',
+    47     icon: '🧠',
+    48     items: [
+    49       { label: 'AI Signals', path: '/ui2/intelligence', icon: '🎯' },
+    50       { label: 'AI Investment Committee', path: '/ui2/ai-committee', icon: '⚖️' },
+    51       { label: 'Bull vs Bear Debate', path: '/ui2/categorized-dashboard', icon: '⚔️' },
+    52       { label: 'Sentiment Engine', path: '/ui2/sentiment', icon: '📰' },
+    53       { label: 'Prediction Engine', path: '/ui2/intelligence', icon: '🔍' },
+    54     ],
+    55   },
+    56   {
+    57     label: 'NEWS',
+    58     icon: '📰',
+    59     items: [
+    60       { label: 'Bloomberg Markets', path: '/ui2/news/bloomberg', icon: '📊' },
+    61       { label: 'Reuters Feed', path: '/ui2/news/reuters', icon: '📡' },
+    62       { label: 'Economic Calendar', path: '/ui2/economic-calendar', icon: '📅' },
+    63       { label: 'Earnings Events', path: '/ui2/news/earnings', icon: '💰' },
+    64     ],
+    65   },
+    66   {
+    67     label: 'ANALYTICS',
+    68     icon: '📈',
+    69     items: [
+    70       { label: 'Portfolio', path: '/ui2/portfolio', icon: '💼' },
+    71       { label: 'Risk Dashboard', path: '/ui2/risk', icon: '🛡️' },
+    72       { label: 'Correlation Matrix', path: '/ui2/correlation', icon: '🔗' },
+    73       { label: 'Historical Trends', path: '/ui2/trends', icon: '📉' },
+    74     ],
+    75   },
+    76 ];
+    77 
+    78 export function LeftNavNew() {
+    79   const navigate = useNavigate();
+    80   const location = useLocation();
+    81   const [expanded, setExpanded] = useState<Record<string, boolean>>({
+    82     'MARKETS': true,
+    83     'AI INTELLIGENCE': true,
+    84     'NEWS': false,
+    85     'ANALYTICS': false,
+    86   });
+    87 
+    88   const toggleSection = (label: string) => {
+    89     setExpanded(prev => ({ ...prev, [label]: !prev[label] }));
+    90   };
+    91 
+    92   return (
+    93     <div style={{
+    94       height: '100%',
+    95       background: T.bg1,
+    96       borderRight: `1px solid ${T.border0}`,
+    97       display: 'flex',
+    98       flexDirection: 'column',
+    99       overflow: 'hidden',
+   100       width: '240px',
+   101     }}>
+   102       {/* Logo */}
+   103       <div style={{
+   104         padding: '16px 16px 12px',
+   105         borderBottom: `1px solid ${T.border0}`,
+   106         display: 'flex',
+   107         alignItems: 'center',
+   108         gap: '10px',
+   109       }}>
+   110         <div style={{
+   111           width: '32px',
+   112           height: '32px',
+   113           background: T.brand,
+   114           borderRadius: '6px',
+   115           display: 'flex',
+   116           alignItems: 'center',
+   117           justifyContent: 'center',
+   118           fontSize: '14px',
+   119           fontWeight: 800,
+   120           color: '#fff',
+   121         }}>
+   122           QM
+   123         </div>
+   124         <div>
+   125           <div style={{ fontSize: '12px', fontWeight: 800, color: T.text0, fontFamily: T.fontMono }}>
+   126             QUANTARA
+   127           </div>
+   128           <div style={{ fontSize: '10px', color: T.text3, letterSpacing: '0.3px' }}>
+   129             Markets Intelligence
+   130           </div>
+   131         </div>
+   132       </div>
+   133 
+   134       {/* Navigation Sections */}
+   135       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
+   136         {NAV_SECTIONS.map((section) => (
+   137           <div key={section.label} style={{ marginBottom: '4px' }}>
+   138             {/* Section Header */}
+   139             <button
+   140               onClick={() => toggleSection(section.label)}
+   141               style={{
+   142                 width: '100%',
+   143                 padding: '10px 16px',
+   144                 background: 'transparent',
+   145                 border: 'none',
+   146                 display: 'flex',
+   147                 alignItems: 'center',
+   148                 justifyContent: 'space-between',
+   149                 cursor: 'pointer',
+   150                 textAlign: 'left',
+   151                 color: T.text2,
+   152                 fontSize: '10px',
+   153                 fontWeight: 700,
+   154                 letterSpacing: '1px',
+   155                 textTransform: 'uppercase',
+   156               }}
+   157             >
+   158               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+   159                 <span style={{ fontSize: '12px' }}>{section.icon}</span>
+   160                 {section.label}
+   161               </span>
+   162               <span style={{ fontSize: '10px', opacity: expanded[section.label] ? 1 : 0.6 }}>
+   163                 {expanded[section.label] ? '▼' : '▶'}
+   164               </span>
+   165             </button>
+   166 
+   167             {/* Section Items */}
+   168             {expanded[section.label] && (
+   169               <div style={{ paddingLeft: '8px' }}>
+   170                 {section.items.map((item) => {
+   171                   const isActive = location.pathname === item.path;
+   172                   return (
+   173                     <button
+   174                       key={item.path}
+   175                       onClick={() => navigate(item.path)}
+   176                       style={{
+   177                         width: '100%',
+   178                         padding: '8px 16px 8px 24px',
+   179                         background: isActive ? `${T.brand}22` : 'transparent',
+   180                         border: 'none',
+   181                         borderLeft: isActive ? `3px solid ${T.brand}` : '3px solid transparent',
+   182                         display: 'flex',
+   183                         alignItems: 'center',
+   184                         justifyContent: 'space-between',
+   185                         cursor: 'pointer',
+   186                         textAlign: 'left',
+   187                         color: isActive ? T.brandLt : T.text1,
+   188                         fontSize: '11px',
+   189                         fontFamily: T.fontSans,
+   190                         transition: 'background 0.15s ease',
+   191                       }}
+   192                       onMouseEnter={(e) => {
+   193                         if (!isActive) e.currentTarget.style.background = T.bg2;
+   194                       }}
+   195                       onMouseLeave={(e) => {
+   196                         if (!isActive) e.currentTarget.style.background = 'transparent';
+   197                       }}
+   198                     >
+   199                       <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+   200                         {item.icon && <span style={{ fontSize: '12px' }}>{item.icon}</span>}
+   201                         {item.label}
+   202                       </span>
+   203                       {item.badge && (
+   204                         <span style={{
+   205                           background: T.brand,
+   206                           color: '#fff',
+   207                           fontSize: '9px',
+   208                           fontWeight: 700,
+   209                           padding: '2px 6px',
+   210                           borderRadius: '10px',
+   211                         }}>
+   212                           {item.badge}
+   213                         </span>
+   214                       )}
+   215                     </button>
+   216                   );
+   217                 })}
+   218               </div>
+   219             )}
+   220           </div>
+   221         ))}
+   222       </div>
+   223 
+   224       {/* Status Footer */}
+   225       <div style={{
+   226         padding: '12px 16px',
+   227         borderTop: `1px solid ${T.border0}`,
+   228         background: T.bg2,
+   229       }}>
+   230         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+   231           <div style={{
+   232             width: '8px',
+   233             height: '8px',
+   234             borderRadius: '50%',
+   235             background: T.up,
+   236             boxShadow: `0 0 8px ${T.up}66`,
+   237           }} />
+   238           <span style={{ fontSize: '10px', color: T.text2, fontWeight: 600 }}>
+   239             LIVE
+   240           </span>
+   241         </div>
+   242         <div style={{ fontSize: '9px', color: T.text3 }}>
+   243           Last update: {new Date().toLocaleTimeString()}
+   244         </div>
+   245       </div>
+   246     </div>
+   247   );
+   248 }
+   249 
+
+
+</observation>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5/tasks/debate_engine.py', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5/tasks/debate_engine.py is successful.]
+Here's the result of running `cat -n` on the file: /workspace/app-bqfaw566pqf5/tasks/debate_engine.py:
+     1 """
+     2 Debate Engine for Quantara Markets
+     3 Adversarial AI debate system with Bull, Bear, and Judge agents
+     4 Inspired by AlphaWalker architecture
+     5 """
+     6 from __future__ import annotations
+     7 
+     8 import asyncio
+     9 import json
+    10 from dataclasses import dataclass, field
+    11 from datetime import datetime, UTC
+    12 from enum import Enum
+    13 from typing import Any, Optional
+    14 
+    15 
+    16 
+    17 
+    18 class Verdict(Enum):
+    19     CONVICTION_BUY = "CONVICTION_BUY"
+    20     BUY = "BUY"
+    21     HOLD = "HOLD"
+    22     AVOID = "AVOID"
+    23     CONVICTION_AVOID = "CONVICTION_AVOID"
+    24     INSUFFICIENT_DATA = "INSUFFICIENT_DATA"
+    25 
+    26 
+    27 @dataclass
+    28 class AgentArgument:
+    29     """Argument from a coalition agent"""
+    30     agent_type: str  # news, quant, macro
+    31     content: str
+    32     confidence: float  # 0.0 to 1.0
+    33     timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
+    34 
+    35 
+    36 @dataclass
+    37 class CoalitionArgument:
+    38     """Synthesized argument from a coalition (Bull or Bear)"""
+    39     side: str  # bull or bear
+    40     arguments: list[AgentArgument] = field(default_factory=list)
+    41     overall_confidence: float = 0.0
+    42     synthesis: str = ""
+    43     timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
+    44 
+    45 
+    46 @dataclass
+    47 class DebateResult:
+    48     """Full debate result including verdict"""
+    49     asset: str
+    50     bull: CoalitionArgument
+    51     bear: CoalitionArgument
+    52     verdict: Verdict
+    53     verdict_confidence: float
+    54     rationale: str
+    55     timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
+    56 
+    57 
+    58 class DebateEngine:
+    59     """Manages the adversarial debate between Bull and Bear coalitions"""
+    60 
+    61     def __init__(self, settings: Optional[Any] = None):
+    62         self.settings = settings
+    63         self._debates: dict[str, DebateResult] = {}
+    64 
+    65     async def run_debate(self, asset: str, prices: list[dict], news: list[dict]) -> DebateResult:
+    66         """
+    67         Run a full debate for an asset
+    68         Returns: DebateResult with Bull, Bear arguments and Judge verdict
+    69         """
+    70         # Run both coalitions in parallel
+    71         bull_task = self._run_bull_coalition(asset, prices, news)
+    72         bear_task = self._run_bear_coalition(asset, prices, news)
+    73         
+    74         bull_arg, bear_arg = await asyncio.gather(bull_task, bear_task)
+    75         
+    76         # Judge renders verdict
+    77         verdict, confidence, rationale = await self._run_judge(asset, bull_arg, bear_arg)
+    78         
+    79         result = DebateResult(
+    80             asset=asset,
+    81             bull=bull_arg,
+    82             bear=bear_arg,
+    83             verdict=verdict,
+    84             verdict_confidence=confidence,
+    85             rationale=rationale,
+    86         )
+    87         
+    88         self._debates[asset] = result
+    89         return result
+    90 
+    91     async def _run_bull_coalition(self, asset: str, prices: list[dict], news: list[dict]) -> CoalitionArgument:
+    92         """Run Bull coalition (optimistic)"""
+    93         arguments: list[AgentArgument] = []
+    94         
+    95         # News agent (bullish catalysts)
+    96         news_arg = await self._bull_news_agent(asset, news)
+    97         arguments.append(news_arg)
+    98         
+    99         # Quant agent (bullish price action)
+   100         quant_arg = await self._bull_quant_agent(asset, prices)
+   101         arguments.append(quant_arg)
+   102         
+   103         # Macro agent (bullish tailwinds)
+   104         macro_arg = await self._bull_macro_agent(asset)
+   105         arguments.append(macro_arg)
+   106         
+   107         # Synthesize
+   108         confidence = sum(a.confidence for a in arguments) / len(arguments)
+   109         synthesis = self._synthesize_coalition(arguments, "bull")
+   110         
+   111         return CoalitionArgument(
+   112             side="bull",
+   113             arguments=arguments,
+   114             overall_confidence=confidence,
+   115             synthesis=synthesis,
+   116         )
+   117 
+   118     async def _run_bear_coalition(self, asset: str, prices: list[dict], news: list[dict]) -> CoalitionArgument:
+   119         """Run Bear coalition (pessimistic)"""
+   120         arguments: list[AgentArgument] = []
+   121         
+   122         # News agent (bearish catalysts)
+   123         news_arg = await self._bear_news_agent(asset, news)
+   124         arguments.append(news_arg)
+   125         
+   126         # Quant agent (bearish price action)
+   127         quant_arg = await self._bear_quant_agent(asset, prices)
+   128         arguments.append(quant_arg)
+   129         
+   130         # Macro agent (bearish headwinds)
+   131         macro_arg = await self._bear_macro_agent(asset)
+   132         arguments.append(macro_arg)
+   133         
+   134         # Synthesize
+   135         confidence = sum(a.confidence for a in arguments) / len(arguments)
+   136         synthesis = self._synthesize_coalition(arguments, "bear")
+   137         
+   138         return CoalitionArgument(
+   139             side="bear",
+   140             arguments=arguments,
+   141             overall_confidence=confidence,
+   142             synthesis=synthesis,
+   143         )
+   144 
+   145     async def _bull_news_agent(self, asset: str, news: list[dict]) -> AgentArgument:
+   146         """News agent finds bullish catalysts"""
+   147         positives = [n for n in news if n.get("sentiment") in ["positive", "bullish"]]
+   148         if positives:
+   149             latest = positives[0]
+   150             return AgentArgument(
+   151                 agent_type="news",
+   152                 content=f"Positive news: '{latest.get('headline', 'Bullish catalyst')}' from {latest.get('source', 'market')}",
+   153                 confidence=min(0.9, 0.5 + len(positives) * 0.1),
+   154             )
+   155         return AgentArgument(
+   156             agent_type="news",
+   157             content="No major negative news detected, market sentiment remains stable",
+   158             confidence=0.4,
+   159         )
+   160 
+   161     async def _bear_news_agent(self, asset: str, news: list[dict]) -> AgentArgument:
+   162         """News agent finds bearish catalysts"""
+   163         negatives = [n for n in news if n.get("sentiment") in ["negative", "bearish"]]
+   164         if negatives:
+   165             latest = negatives[0]
+   166             return AgentArgument(
+   167                 agent_type="news",
+   168                 content=f"Negative news: '{latest.get('headline', 'Bearish catalyst')}' from {latest.get('source', 'market')}",
+   169                 confidence=min(0.9, 0.5 + len(negatives) * 0.1),
+   170             )
+   171         return AgentArgument(
+   172             agent_type="news",
+   173             content="Market uncertainty remains, no strong positive catalyst to drive upside",
+   174             confidence=0.4,
+   175         )
+   176 
+   177     async def _bull_quant_agent(self, asset: str, prices: list[dict]) -> AgentArgument:
+   178         """Quant agent finds bullish price action"""
+   179         if len(prices) >= 2:
+   180             current = prices[-1]["price"]
+   181             prev = prices[-2]["price"]
+   182             momentum = (current - prev) / prev if prev > 0 else 0
+   183             
+   184             if momentum > 0:
+   185                 return AgentArgument(
+   186                     agent_type="quant",
+   187                     content=f"Positive price momentum ({momentum*100:.2f}% change) indicates upward trend",
+   188                     confidence=min(0.85, 0.5 + abs(momentum) * 2),
+   189                 )
+   190         return AgentArgument(
+   191             agent_type="quant",
+   192             content="Price action is constructive, no immediate breakdown pattern",
+   193             confidence=0.45,
+   194         )
+   195 
+   196     async def _bear_quant_agent(self, asset: str, prices: list[dict]) -> AgentArgument:
+   197         """Quant agent finds bearish price action"""
+   198         if len(prices) >= 2:
+   199             current = prices[-1]["price"]
+   200             prev = prices[-2]["price"]
+   201             momentum = (current - prev) / prev if prev > 0 else 0
+   202             
+   203             if momentum < 0:
+   204                 return AgentArgument(
+   205                     agent_type="quant",
+   206                     content=f"Negative price momentum ({momentum*100:.2f}% change) indicates downward pressure",
+   207                     confidence=min(0.85, 0.5 + abs(momentum) * 2),
+   208                 )
+   209         return AgentArgument(
+   210             agent_type="quant",
+   211             content="Market showing signs of distribution, lack of buying conviction",
+   212             confidence=0.45,
+   213         )
+   214 
+   215     async def _bull_macro_agent(self, asset: str) -> AgentArgument:
+   216         """Macro agent finds bullish tailwinds"""
+   217         return AgentArgument(
+   218             agent_type="macro",
+   219             content="Sector tailwinds and broader market liquidity provide supportive backdrop",
+   220             confidence=0.5,
+   221         )
+   222 
+   223     async def _bear_macro_agent(self, asset: str) -> AgentArgument:
+   224         """Macro agent finds bearish headwinds"""
+   225         return AgentArgument(
+   226             agent_type="macro",
+   227             content="Macro uncertainty and valuation concerns pose significant headwinds",
+   228             confidence=0.5,
+   229         )
+   230 
+   231     def _synthesize_coalition(self, arguments: list[AgentArgument], side: str) -> str:
+   232         """Synthesize coalition arguments into a coherent case"""
+   233         points = [a.content for a in arguments]
+   234         if side == "bull":
+   235             return f"Strong bullish case supported by: {'; '.join(points)}"
+   236         return f"Compelling bearish narrative based on: {'; '.join(points)}"
+   237 
+   238     async def _run_judge(self, asset: str, bull: CoalitionArgument, bear: CoalitionArgument) -> tuple[Verdict, float, str]:
+   239         """Judge agent evaluates both sides and renders verdict"""
+   240         bull_conf = bull.overall_confidence
+   241         bear_conf = bear.overall_confidence
+   242         
+   243         # If both are low confidence
+   244         if bull_conf < 0.35 and bear_conf < 0.35:
+   245             return (
+   246                 Verdict.INSUFFICIENT_DATA,
+   247                 0.5,
+   248                 "Both coalitions have low confidence. Market lacks clear directional bias — DO NOT TRADE.",
+   249             )
+   250         
+   251         # Calculate score differential
+   252         score_diff = bull_conf - bear_conf
+   253         confidence = abs(score_diff)
+   254         
+   255         if score_diff > 0.3:
+   256             return (
+   257                 Verdict.CONVICTION_BUY,
+   258                 confidence,
+   259                 f"Bull coalition has significantly stronger case (confidence gap: {score_diff:.2f})",
+   260             )
+   261         elif score_diff > 0.1:
+   262             return (
+   263                 Verdict.BUY,
+   264                 confidence,
+   265                 f"Bull case is stronger but with some reservations (confidence gap: {score_diff:.2f})",
+   266             )
+   267         elif score_diff < -0.3:
+   268             return (
+   269                 Verdict.CONVICTION_AVOID,
+   270                 confidence,
+   271                 f"Bear coalition has significantly stronger case (confidence gap: {abs(score_diff):.2f})",
+   272             )
+   273         elif score_diff < -0.1:
+   274             return (
+   275                 Verdict.AVOID,
+   276                 confidence,
+   277                 f"Bear case is stronger but with some reservations (confidence gap: {abs(score_diff):.2f})",
+   278             )
+   279         else:
+   280             return (
+   281                 Verdict.HOLD,
+   282                 0.5,
+   283                 "Both sides present compelling arguments. Market is balanced — HOLD position.",
+   284             )
+   285 
+   286     def get_debate(self, asset: str) -> Optional[DebateResult]:
+   287         """Get cached debate result for an asset"""
+   288         return self._debates.get(asset)
+   289 
+   290     def get_all_debates(self) -> dict[str, DebateResult]:
+   291         """Get all cached debate results"""
+   292         return self._debates.copy()
+   293 
+   294 
+   295 def debate_to_dict(debate: DebateResult) -> dict[str, Any]:
+   296     """Convert DebateResult to serializable dict"""
+   297     return {
+   298         "asset": debate.asset,
+   299         "bull": {
+   300             "side": debate.bull.side,
+   301             "arguments": [
+   302                 {
+   303                     "agent_type": a.agent_type,
+   304                     "content": a.content,
+   305                     "confidence": a.confidence,
+   306                     "timestamp": a.timestamp.isoformat(),
+   307                 }
+   308                 for a in debate.bull.arguments
+   309             ],
+   310             "overall_confidence": debate.bull.overall_confidence,
+   311             "synthesis": debate.bull.synthesis,
+   312             "timestamp": debate.bull.timestamp.isoformat(),
+   313         },
+   314         "bear": {
+   315             "side": debate.bear.side,
+   316             "arguments": [
+   317                 {
+   318                     "agent_type": a.agent_type,
+   319                     "content": a.content,
+   320                     "confidence": a.confidence,
+   321                     "timestamp": a.timestamp.isoformat(),
+   322                 }
+   323                 for a in debate.bear.arguments
+   324             ],
+   325             "overall_confidence": debate.bear.overall_confidence,
+   326             "synthesis": debate.bear.synthesis,
+   327             "timestamp": debate.bear.timestamp.isoformat(),
+   328         },
+   329         "verdict": debate.verdict.value,
+   330         "verdict_confidence": debate.verdict_confidence,
+   331         "rationale": debate.rationale,
+   332         "timestamp": debate.timestamp.isoformat(),
+   333     }
+   334 
+
+
+</observation>
+<action>
+FileReadAction(path='/workspace/app-bqfaw566pqf5/tasks/README.md', start=0, end=-1, thought='', action=<ActionType.READ: 'read'>, security_risk=None, impl_source=<FileReadSource.OH_ACI: 'oh_aci'>, view_range=None, user_hidden=False)
+</action>
+<observation>
+[Read from /workspace/app-bqfaw566pqf5/tasks/README.md is successful.]
+Here's the result of running `cat -n` on the file: /workspace/app-bqfaw566pqf5/tasks/README.md:
+     1 # Apex Terminal
+     2 
+     3 **A Bloomberg-style trading workstation built for serious retail traders.**
+     4 
+     5 <div align="center">
+     6 
+     7 [![React](https://img.shields.io/badge/React_19-61DAFB.svg?style=flat-square&logo=React&logoColor=black)](https://react.dev)
+     8 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat-square&logo=TypeScript&logoColor=white)](https://www.typescriptlang.org)
+     9 [![FastAPI](https://img.shields.io/badge/FastAPI-009688.svg?style=flat-square&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
+    10 [![Python](https://img.shields.io/badge/Python_3.10+-3776AB.svg?style=flat-square&logo=Python&logoColor=white)](https://python.org)
+    11 [![Playwright](https://img.shields.io/badge/Playwright-2EAD33.svg?style=flat-square&logo=Playwright&logoColor=white)](https://playwright.dev)
+    12 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+    13 
+    14 [Features](#-features) • [Architecture](#-architecture) • [Quick Start](#-quick-start) • [Testing](#-testing) • [Roadmap](#-roadmap)
+    15 
+    16 </div>
+    17 
+    18 ---
+    19 
+    20 ## Screenshots
+    21 
+    22 ![Trading](media/screenshots/trading.png)
+    23 ![Autopilot](media/screenshots/autopilot.png)
+    24 ![Portfolio](media/screenshots/portfolio.png)
+    25 ![Options Chain](media/screenshots/options-chain.png)
+    26 
+    27 <!-- Additional screenshots in media/screenshots/ -->
+    28 
+    29 ---
+    30 
+    31 ## Features
+    32 
+    33 ### Charting
+    34 - Candlestick chart powered by **lightweight-charts v5** — 1m, 5m, 15m, 1h, 1D timeframes
+    35 - **35 server-side technical indicators**: SMA, EMA, VWAP, RSI, MACD, Bollinger Bands, ATR, Ichimoku Cloud, Stochastic, OBV, MFI, and more
+    36 - Bloomberg-style dense dashboard with live KPIs and equity curve
+    37 
+    38 ### Autopilot
+    39 - Multi-signal **AI paper trading engine** — scans a configurable symbol universe, scores candidates, executes paper trades autonomously
+    40 - Full pipeline view: signal generation → candidate scoring → order execution → ledger
+    41 - Equity curve rendered via ApexAreaChart (lightweight-charts)
+    42 
+    43 ### Portfolio
+    44 - Live positions and P&L via Alpaca paper account
+    45 - Sharpe ratio, max drawdown, volatility KPIs from live performance data
+    46 - Equity curve with drawdown overlay
+    47 
+    48 ### Options
+    49 - Full options chain with Greeks: Delta, Gamma, Vega, Theta, Implied Volatility
+    50 - Powered by **Tradier API** (optional)
+    51 
+    52 ### Data & Order Management
+    53 - Right sidebar: Order ticket, live Watchlist, Positions, News feed, L2 depth, Time & Sales
+    54 - Live quotes via Alpaca; WebSocket tick streaming via Finnhub; yfinance as delayed fallback
+    55 - Batch quote endpoint for efficient multi-symbol updates
+    56 
+    57 ---
+    58 
+    59 ## Architecture
+    60 
+    61 ```
+    62 Browser (http://localhost:5100/ui2)
+    63   │
+    64   │  React 19 + Vite 5 + Zustand + lightweight-charts v5
+    65   │  Tailwind CSS 4 · TypeScript · React Router 7
+    66   │
+    67   └─── HTTP / WebSocket ──────────────────────────────────────────────
+    68                                                                       │
+    69                               FastAPI  (http://localhost:8000)        │
+    70                               phase1/services/api/main.py             │
+    71                                                                       │
+    72                          ┌────────────────────────────────────────────┘
+    73                          │
+    74              ┌───────────┼────────────────┬───────────────┐
+    75              │           │                │               │
+    76           Alpaca      Tradier          Finnhub         yfinance
+    77      (broker + data) (options)      (WS ticks)      (delayed fallback)
+    78                                                           │
+    79                                                        SQLite
+    80                                                (bars.db · autopilot_v3.db)
+    81 ```
+    82 
+    83 ---
+    84 
+    85 ## Quick Start
+    86 
+    87 ### Prerequisites
+    88 - Python 3.10+
+    89 - Node.js 18+ and npm
+    90 
+    91 ### 1. Clone & configure
+    92 
+    93 ```bash
+    94 git clone https://github.com/aaravjj2/Apex-Terminal.git
+    95 cd Apex-Terminal
+    96 cp .env.example keys.env
+    97 # Edit keys.env — fill in APCA_API_KEY_ID and APCA_API_SECRET_KEY at minimum
+    98 ```
+    99 
+   100 ### 2. Start the backend
+   101 
+   102 ```bash
+   103 cd phase1
+   104 python -m venv venv
+   105 source venv/bin/activate          # Windows: venv\Scripts\activate
+   106 pip install -r requirements.txt
+   107 python -m uvicorn services.api.main:app --reload --port 8000
+   108 ```
+   109 
+   110 API docs available at `http://localhost:8000/docs`.
+   111 
+   112 ### 3. Start the frontend
+   113 
+   114 ```bash
+   115 cd frontend
+   116 npm install
+   117 npm run dev                       # Runs on http://localhost:5100
+   118 ```
+   119 
+   120 Open **http://localhost:5100/ui2**.
+   121 
+   122 ---
+   123 
+   124 ## Environment Variables
+   125 
+   126 Copy `.env.example` to `keys.env` in the project root. Full documentation is in that file.
+   127 
+   128 | Variable | Required | Description |
+   129 |---|---|---|
+   130 | `APCA_API_KEY_ID` | Yes | Alpaca API key — enables live market data and paper trading |
+   131 | `APCA_API_SECRET_KEY` | Yes | Alpaca API secret |
+   132 | `APCA_ENDPOINT` | Yes | `https://paper-api.alpaca.markets` for paper trading |
+   133 | `FINNHUB_API_KEY` | Optional | Real-time news feed and WebSocket tick streaming |
+   134 | `TRADIER_BROKERAGE_KEY` | Optional | Options chain data with Greeks |
+   135 | `POLYGON_API_KEY` | Optional | Additional equities/options data source |
+   136 
+   137 Get Alpaca paper trading keys free at [alpaca.markets](https://alpaca.markets).
+   138 
+   139 ---
+   140 
+   141 ## Testing
+   142 
+   143 ```bash
+   144 # TypeScript type check
+   145 cd frontend && npx tsc --noEmit
+   146 
+   147 # Backend unit tests
+   148 cd phase1 && source venv/bin/activate
+   149 python -m pytest tests/unit/ --tb=short -q
+   150 
+   151 # E2E tests (Playwright, 108 tests across 7 suites)
+   152 cd frontend
+   153 npx playwright test
+   154 ```
+   155 
+   156 Run suites sequentially — concurrent Playwright runs cause trace write conflicts.
+   157 
+   158 Suites: `navigation`, `portfolio`, `chart-views`, `autopilot`, `autopilot-live`, `investor-personas`, `indicators-e2e`.
+   159 
+   160 ---
+   161 
+   162 ## Project Structure
+   163 
+   164 ```
+   165 Apex-Terminal/
+   166 ├── frontend/                  # React 19 + TypeScript + Vite 5
+   167 │   ├── src/ui2/               # Active UI (pages, shell, stores, services, components)
+   168 │   │   └── components/chart/  # ApexChart.tsx + ApexAreaChart.tsx (lightweight-charts v5)
+   169 │   └── tests/e2e/             # Playwright test suites
+   170 ├── phase1/                    # FastAPI backend
+   171 │   ├── services/api/          # Route handlers (market data, portfolio, options, autopilot)
+   172 │   ├── services/autopilot/    # Autopilot engine (unified_engine.py, brain_v3.py)
+   173 │   └── data/                  # bars.db SQLite database
+   174 ├── media/screenshots/         # App screenshots
+   175 ├── .env.example               # Environment variable reference
+   176 └── tasks.md                   # Full improvement roadmap
+   177 ```
+   178 
+   179 ---
+   180 
+   181 ## Roadmap
+   182 
+   183 Full detail in [tasks.md](tasks.md).
+   184 
+   185 - **Sprint 2** — Autopilot WebSocket (replace 13 polling timers), candidate drill-down panel, config save/load
+   186 - **Sprint 3** — Docker Compose full-stack deployment, nginx reverse proxy, rate limiting, DB connection pooling
+   187 - **Sprint 4** — Volume histogram overlay, virtual scroll for large option chains, performance regression tests, AI signal quality improvements
+   188 
+   189 ---
+   190 
+   191 ## Contributing
+   192 
+   193 Pull requests are welcome. For significant changes, open an issue first. Ensure `npx tsc --noEmit` and `npx playwright test` pass before opening a PR.
+   194 
+   195 ## License
+   196 
+   197 [MIT](LICENSE)
+   198 
+
+
+</observation>
+<action>
+AgentThinkAction(thought="\nNow I have a full picture of the existing code. The user wants me to build a production-ready enhanced version of the Quantara Markets platform. The project doesn't have an existing app structure - it's just the uploaded reference files in /tasks/. I need to build a complete React + TypeScript + Vite app from scratch.\n\nKey requirements:\n1. Ultra-professional Bloomberg/BlackRock aesthetic - dark theme, dense layout\n2. Real data from Finnhub API (key provided: d81qdgpr01qrojfcp20gd81qdgpr01qrojfcp210), Alpha Vantage (Q07QPO53RBL3OQWA), NewsAPI (v9NSpLzpbNJpH75KsmOvu8SAxSLdpw2t)\n3. AI Committee page enhancements - live confidence meters, news timeline, judge verdict with risk flags\n4. Landing page polish - professional animations, live tickers, smooth transitions\n5. Bloomberg-style left nav\n\nThe app needs to be a standalone React app since there's no existing project directory. Let me call PRDAgent first, then build the app.\n\nI'll need to:\n1. Call PRDAgent for requirements\n2. Get aesthetic template\n3. Build the full React + TypeScript + Vite app\n4. Register secrets for the API keys\n", action=<ActionType.THINK: 'think'>)
+</action>
+<observation>
+AgentThinkObservation(content='Your thought has been logged.', observation=<ObservationType.THINK: 'think'>)
+</observation>
+<action>
+**MessageAction** (source=EventSource.AGENT)
+CONTENT: 
+</action>
+<action>
+**RecallAction**
+QUERY: Generate App
+</action>
+<action>
+**MessageAction** (source=EventSource.AGENT)
+CONTENT: I'll create a website based on your idea, including multiple pages and features. Let me first map out the overall implementation plan.
+</action>
+<action>
+**MCPAction**
+NAME: generate_start
+ARGUMENTS: {'appId': 'app-bqfaw566pqf5', 'userId': 'user-betgjf4294ao', 'requirementType': 'Web', 'hasAgent': False, 'hasCodeTemplate': 'NONE', 'codeTemplateZipUrl': '', 'isBoilerplate': False, 'isFirstGeneration': True, 'use_supabase': False}
+</action>
+<observation>
+**MCPObservation**
+NAME: generate_start
+RESULTS: {"code":0,"message":"success"}
+</observation>
+<action>
+**MCPAction**
+NAME: aesthetic_template
+ARGUMENTS: {'input': 'Bloomberg Terminal institutional financial dark theme - deep dark backgrounds (#0C0E12, #131722), Bloomberg blue (#2962FF), green/red for market data, JetBrains Mono for numbers, Inter for UI, dense professional layout', 'appId': 'app-bqfaw566pqf5', 'userId': 'user-betgjf4294ao', 'appType': 'Web', 'prd': '# Requirements Document\n\n## 1. Application Overview\n\n### 1.1 Application Name\nQuantara Markets - Institutional-Grade AI Financial Terminal\n\n### 1.2 Application Description\nA production-ready financial intelligence platform with Bloomberg Terminal aesthetic, providing real-time market data, AI-powered investment analysis, and comprehensive market overview capabilities. The application integrates multiple financial data APIs to deliver institutional-grade insights for retail and professional traders.\n\n## 2. Users and Usage Scenarios\n\n### 2.1 Target Users\n- Retail traders seeking institutional-grade tools\n- Financial analysts requiring real-time market intelligence\n- Investment professionals needing AI-assisted decision support\n\n### 2.2 Core Usage Scenarios\n- Monitor real-time market data across multiple asset classes\n- Analyze investment opportunities through AI committee debate system\n- Track portfolio performance and market movements\n- Access financial news and sentiment analysis\n\n## 3. Page Structure and Functionality\n\n### 3.1 Page Hierarchy\n\n```\nQuantara Markets Terminal\n├── Landing/Home Page\n├── AI Investment Committee Page\n├── Market Overview Dashboard\n└── Left Navigation (persistent across all pages)\n```\n\n### 3.2 Page-by-Page Functionality\n\n#### 3.2.1 Landing/Home Page\n\n**Purpose**: Entry point showcasing platform capabilities and driving user engagement\n\n**Core Elements**:\n- Hero section with animated background (subtle particle/grid effect)\n- Live scrolling ticker bar displaying real-time prices from Finnhub API (key: d81qdgpr01qrojfcp20gd81qdgpr01qrojfcp210)\n- Feature cards highlighting: AI Committee, Real-Time Signals, Moroccan Market coverage\n- Animated stat counters showing: assets tracked, signals generated, accuracy metrics\n- Two primary CTA buttons: \\"Enter Terminal\\" (navigates to Market Overview Dashboard), \\"AI Committee\\" (navigates to AI Investment Committee Page)\n\n**Animations**:\n- Fade/slide-in animations on page load for hero section and feature cards\n- Smooth transitions for all interactive elements\n\n#### 3.2.2 AI Investment Committee Page\n\n**Purpose**: Provide AI-powered investment analysis through multi-agent debate system\n\n**Layout Structure**:\n- Three-column debate panel: Bull Agent | Judge Agent | Bear Agent\n- News timeline section below debate panel\n- Asset selector and control panel\n\n**Bull Agent Column**:\n- Displays bullish arguments with confidence meter (animated progress bar with pulse effect)\n- Sub-arguments from: News Agent, Quant Agent, Macro Agent\n- Individual confidence scores per sub-agent\n\n**Bear Agent Column**:\n- Displays bearish arguments with confidence meter\n- Sub-arguments from: News Agent, Quant Agent, Macro Agent\n- Individual confidence scores per sub-agent\n\n**Judge Agent Column**:\n- Renders final verdict: BUY/HOLD/SELL with animated reveal\n- Risk flags with color coding (green/orange/red)\n- Overall confidence score\n\n**Asset Selector**:\n- Dropdown or button group for: TSLA, NVDA, AAPL, MSFT, AMZN, META, BTC-USD, XAUUSD, MASI\n- Selecting an asset triggers debate regeneration\n\n**Debate Controls**:\n- \\"Rerun Debate\\" button: fetches fresh data and regenerates entire debate\n- Debate round indicator: displays Round 1, Round 2, Final Verdict\n\n**News Timeline Section**:\n- Displays recent news articles fetched from NewsAPI (key: v9NSpLzpbNJpH75KsmOvu8SAxSLdpw2t)\n- Shows headlines, timestamps, and sentiment indicators\n- Articles are filtered by selected asset\n\n**Data Sources**:\n- News data: NewsAPI\n- Price data: Finnhub API or Alpha Vantage API (key: Q07QPO53RBL3OQWA)\n- Sentiment analysis: derived from news headlines\n\n#### 3.2.3 Market Overview Dashboard\n\n**Purpose**: Comprehensive view of live market data across asset classes\n\n**Core Components**:\n\n**Category Tabs**:\n- US Equities\n- Crypto\n- Commodities\n- Forex\n- Moroccan (MASI)\n\n**Market Data Grid**:\n- Displays for each asset: symbol, current price, percentage change, volume\n- Mini sparkline chart per asset showing recent price movement\n- Color coding: green for positive change, red for negative change\n\n**Top Movers Section**:\n- Highlights assets with largest percentage gains\n- Highlights assets with largest percentage losses\n- Updates in real-time\n\n**Data Refresh**:\n- Live updates from Finnhub API and Alpha Vantage API\n\n#### 3.2.4 Left Navigation (Persistent)\n\n**Purpose**: Primary navigation interface across all pages\n\n**Structure**:\n- Collapsible sections with Bloomberg-style design\n- MARKETS section: links to Market Overview Dashboard, individual asset categories\n- AI INTELLIGENCE section: link to AI Investment Committee Page\n- NEWS section: link to news feed (if implemented)\n- ANALYTICS section: link to analytics tools (if implemented)\n\n**Status Indicator**:\n- Live status indicator at bottom showing API connection status\n- Displays: Connected (green) / Disconnected (red)\n\n**Active Route Highlighting**:\n- Current page highlighted in navigation menu\n\n## 4. Business Rules and Logic\n\n### 4.1 AI Committee Debate Logic\n\n**Data Fetching**:\n- When user selects an asset, system fetches:\n  - Recent news articles from NewsAPI filtered by asset symbol\n  - Current and historical price data from Finnhub or Alpha Vantage\n  - Company information and sentiment data from Finnhub\n\n**Argument Generation (Rule-Based Engine)**:\n\n**Bull Agent Logic**:\n- News Agent: analyzes positive sentiment in recent headlines, assigns confidence based on number and recency of positive articles\n- Quant Agent: evaluates price momentum (recent price increases), assigns confidence based on percentage gain over lookback period\n- Macro Agent: applies pre-defined bullish macro factors per asset category (e.g., tech sector growth for AAPL, gold demand for XAUUSD)\n- Overall Bull confidence: weighted average of three sub-agents\n\n**Bear Agent Logic**:\n- News Agent: analyzes negative sentiment in recent headlines\n- Quant Agent: evaluates price weakness (recent price decreases, high volatility)\n- Macro Agent: applies pre-defined bearish macro factors per asset category\n- Overall Bear confidence: weighted average of three sub-agents\n\n**Judge Agent Logic**:\n- Calculates confidence differential: Bull confidence minus Bear confidence\n- Verdict rules:\n  - If differential > +20: BUY verdict\n  - If differential between -20 and +20: HOLD verdict\n  - If differential < -20: SELL verdict\n- Risk flags: generated based on volatility, news sentiment variance, data quality\n- Judge confidence: reflects data completeness and consistency\n\n**Debate Rounds**:\n- Round 1: Initial arguments based on latest data\n- Round 2: Refined arguments incorporating counter-arguments\n- Final Verdict: Judge renders decision\n\n### 4.2 Live Data Update Rules\n\n**Ticker Bar (Home Page)**:\n- Fetches quotes from Finnhub API every 5 seconds\n- Displays: symbol, price, percentage change\n- Scrolls continuously from right to left\n\n**Market Overview Dashboard**:\n- Fetches quotes for all displayed assets every 10 seconds\n- Updates sparkline charts with new data points\n- Recalculates top movers on each update\n\n**AI Committee Page**:\n- News timeline refreshes when \\"Rerun Debate\\" is clicked or asset is changed\n- Confidence meters animate to new values on debate regeneration\n\n### 4.3 API Key Management\n\n**Finnhub API**:\n- Key: d81qdgpr01qrojfcp20gd81qdgpr01qrojfcp210\n- Used for: real-time quotes, company news, sentiment data\n\n**Alpha Vantage API**:\n- Key: Q07QPO53RBL3OQWA\n- Used for: quote data, technical indicators\n\n**NewsAPI**:\n- Key: v9NSpLzpbNJpH75KsmOvu8SAxSLdpw2t\n- Used for: financial news articles for debate timeline\n\n### 4.4 Design System Application\n\n**Color Palette**:\n- bg0: #0C0E12 (deepest background)\n- bg1: #131722 (panel background)\n- bg2: #1E222D (card background)\n- bg3: #2A2E39 (hover/elevated states)\n- brand: #2962FF (Bloomberg blue for primary actions)\n- up: #26A69A (green for positive values)\n- dn: #EF5350 (red for negative values)\n- warn: #FF9800 (orange for warnings)\n- text0: #FFF (primary text)\n- text1: #D1D4DC (secondary text)\n- text2: #787B86 (tertiary text)\n- text3: #50535E (disabled text)\n\n**Typography**:\n- UI text: Inter font family\n- Data/numbers: JetBrains Mono font family\n\n**Animation Principles**:\n- Professional micro-animations: fade in, slide up, pulse on live data updates\n- Smooth transitions for all state changes\n- No flashy or neon effects\n\n## 5. Exception and Boundary Cases\n\n| Scenario | Handling |\n|----------|----------|\n| API request fails (network error) | Display error state with retry button, show toast notification with error message |\n| API rate limit exceeded | Display warning message, implement exponential backoff for retries |\n| No news articles found for selected asset | Display \\"No recent news available\\" message in news timeline |\n| Invalid API key | Display error state, prompt user to check configuration |\n| Asset data unavailable | Show \\"Data unavailable\\" placeholder in market grid, exclude from top movers |\n| Debate generation fails | Display error message, allow user to retry with \\"Rerun Debate\\" button |\n| Slow API response | Show loading skeleton while fetching data, timeout after 30 seconds |\n| User selects asset not supported by API | Display \\"Asset not supported\\" message, disable debate generation |\n\n## 6. Acceptance Criteria\n\n1. User opens application and lands on Home Page, sees animated hero section with live ticker bar displaying real-time prices from Finnhub API\n2. User clicks \\"AI Committee\\" button, navigates to AI Investment Committee Page\n3. User selects TSLA from asset selector, system fetches news from NewsAPI and price data from Finnhub/Alpha Vantage\n4. System displays three-column debate with Bull/Bear/Judge agents, each showing confidence meters and sub-agent arguments\n5. User clicks \\"Rerun Debate\\" button, system fetches fresh data and regenerates debate with updated confidence scores and verdict\n6. User clicks \\"Enter Terminal\\" from Home Page, navigates to Market Overview Dashboard\n7. User sees market data grid with live prices, percentage changes, and mini sparkline charts across all category tabs\n8. User observes live updates: prices refresh every 10 seconds, top movers section updates automatically\n\n## 7. Out of Scope for This Release\n\n- User authentication and login system\n- Portfolio management and trade execution capabilities\n- Historical data charting beyond mini sparklines\n- Customizable watchlists\n- Alert and notification system\n- Mobile app version\n- Backend server implementation (all API calls from frontend)\n- Database for storing user preferences or historical data\n- Advanced technical indicators beyond what APIs provide\n- Multi-language support\n- Dark/light theme toggle (dark theme only)\n- Export functionality for reports or data\n- Integration with brokerage accounts\n- Real-time WebSocket streaming (using polling instead)\n- Options chain data\n- Backtesting capabilities\n- Social features (sharing, commenting)\n- Advanced filtering and search across news/data\n- Custom alert rules\n- Performance optimization for screens smaller than 1920px width'}
+</action>
+<observation>
+**MCPObservation**
+NAME: aesthetic_template
+RESULTS: # Quantara Markets - Institutional-Grade Financial Terminal Design System
+
+## Color（配色方案）
+
+**主背景色**：采用深空灰阶体系，以 `#0C0E12` 作为最深层背景，`#131722` 作为面板底色，`#1E222D` 作为卡片背景，通过微妙的明度差异构建信息层级，避免纯黑造成的视觉疲劳。
+
+**主色**：Bloomberg 蓝 `#2962FF` 作为唯一主色，仅用于关键操作按钮（Enter Terminal / AI Committee）、活动状态指示及数据高亮，传递专业与可信赖感。
+
+**功能色**：涨跌双色系统——涨 `#26A69A`（青绿）、跌 `#EF5350`（珊瑚红），用于价格变动、信心指数等数据可视化，警告色 `#FF9800`（琥珀橙）仅用于风险标记。
+
+**文字色**：四级灰阶——主文字 `#FFF`、次级文字 `#D1D4DC`、辅助文字 `#787B86`、禁用文字 `#50535E`，确保在深色背景下的清晰层级。
+
+**禁止渐变**：所有界面元素使用纯色填充，通过透明度与叠加实现深度，拒绝任何装饰性渐变。
+
+---
+
+## Layout（布局结构）
+
+**网格系统**：采用 12 列栅格，组件间距 16px/24px，确保数据密度与呼吸感平衡，所有卡片与面板悬浮于背景之上，通过 1px 边框（`rgba(255,255,255,0.08)`）与细微阴影分隔。
+
+**三栏辩论布局**（AI Committee）：Bull / Judge / Bear 等宽分布，每栏内部垂直堆叠子代理论点，Judge 栏居中强调裁决权威性，底部新闻时间轴横向铺开。
+
+**仪表盘网格**（Market Overview）：顶部 Tab 导航固定，下方数据表格采用响应式网格，每个资产卡片包含代码、价格、涨跌幅、迷你走势图，Top Movers 区域独立成行突出显示。
+
+**左侧导航**：固定宽度 240px，可折叠分组（MARKETS / AI INTELLIGENCE / NEWS），底部状态指示器固定，当前路由高亮显示蓝色左边框。
+
+**首页布局**：Hero 区域占据视口 60% 高度，实时滚动 Ticker 固定于顶部，功能卡片采用 3 列网格，CTA 按钮居中对齐。
+
+---
+
+## Elements（界面元素）
+
+**按钮**：主按钮使用 `#2962FF` 填充，悬停时透明度降至 90%，次级按钮仅保留边框，圆角统一为 4px，字体使用 Inter 600 权重，禁止使用任何 emoji。
+
+**卡片组件**：背景色 `#1E222D`，边框 `1px solid rgba(255,255,255,0.08)`，圆角 6px，内边距 20px，悬停时边框透明度提升至 0.12，无阴影扩散效果。
+
+**信心指数条**：横向进度条，填充色根据 Bull/Bear 使用涨跌色，背景为 `#2A2E39`，高度 8px，圆角 4px，数值标签使用 JetBrains Mono 字体显示百分比。
+
+**迷你走势图**：使用 Canvas 绘制，线条宽度 1.5px，涨跌色填充，无网格线，高度 40px，宽度自适应卡片宽度，仅显示最近 20 个数据点。
+
+**Ticker 滚动条**：黑色半透明背景 `rgba(12,14,18,0.95)`，高度 48px，文字使用 JetBrains Mono，价格与涨跌幅颜色编码，无缝循环滚动。
+
+**Tab 导航**：底部边框指示活动状态，使用主色 `#2962FF`，非活动 Tab 文字颜色为 `#787B86`，悬停时提升至 `#D1D4DC`，无背景填充。
+
+**状态指示器**：圆形 LED 样式，直径 8px，绿色 `#26A69A` 表示连接，红色 `#EF5350` 表示断开，带 2px 外发光效果模拟实体指示灯。
+
+**新闻卡片**：标题使用 Inter 500，时间戳与来源使用次级文字色，情绪标签（Positive/Negative/Neutral）使用对应功能色，圆角标签样式。
+
+---
+
+## Motion（动效设计）
+
+**页面加载**：Hero 区域与功能卡片采用 `fade-in + translateY(-20px)` 入场，延迟 100ms 错开，持续 400ms，缓动函数 `cubic-bezier(0.4, 0, 0.2, 1)`。
+
+**实时数据更新**：价格变动时触发 200ms 的脉冲动画（scale 1.05 → 1），涨跌色闪烁一次，Top Movers 区域重新排序时使用 300ms 的位置过渡。
+
+**按钮交互**：悬停时 150ms 透明度过渡，点击时 `scale(0.98)` 反馈，持续 100ms，无涟漪效果。
+
+**辩论生成**：信心指数条从 0% 动画至目标值，持续 800ms，使用 `ease-out` 缓动，裁决结果（BUY/HOLD/SELL）以 `opacity 0 → 1` 配合 `scale 0.9 → 1` 显现，持续 500ms。
+
+**Ticker 滚动**：使用 CSS `animation` 实现无缝循环，速度 60px/s，无加速减速，确保数据可读性。
+
+**导航折叠**：分组展开/收起使用 `max-height` 过渡，持续 300ms，配合 `ease-in-out` 缓动，图标旋转 180° 同步进行。
+
+**加载骨架屏**：数据加载时显示灰色占位块（`#2A2E39`），带 1.5s 循环的微光扫过效果（`linear-gradient` 位移动画），避免突兀的空白状态。
+
+---
+
+## 技术建议
+
+- 优先使用 `transform` 与 `opacity` 实现动画，避免触发重排
+- 数据更新采用 `requestAnimationFrame` 优化渲染性能
+- 走势图使用 Canvas API 而非 SVG，降低 DOM 节点数量
+- Ticker 滚动通过 CSS `animation` 而非 JavaScript 定时器实现
+- 避免引入复杂动画库，所有动效通过原生 CSS Transitions/Animations 完成
+</observation>
+<action>
+TodoAction(todos=[TodoItem(id='1', status='pending', priority='high', content='Set up project structure, install dependencies, configure vite/tsconfig', details='', group=None, agent_name=None), TodoItem(id='2', status='pending', priority='high', content='Build design system: global CSS, color tokens, typography, animations', details='', group=None, agent_name=None), TodoItem(id='3', status='pending', priority='high', content='Build API service layer: Finnhub, Alpha Vantage, NewsAPI clients + debate engine', details='', group=None, agent_name=None), TodoItem(id='4', status='pending', priority='high', content='Build Left Navigation component (Bloomberg-style collapsible)', details='', group=None, agent_name=None), TodoItem(id='5', status='pending', priority='high', content='Build Landing/Home page with animated hero, live ticker, feature cards', details='', group=None, agent_name=None), TodoItem(id='6', status='pending', priority='high', content='Build AI Investment Committee page with 3-column debate, news timeline, confidence meters', details='', group=None, agent_name=None), TodoItem(id='7', status='pending', priority='high', content='Build Market Overview Dashboard with tabs, data grid, sparklines, top movers', details='', group=None, agent_name=None), TodoItem(id='8', status='pending', priority='high', content='Build app shell, routing, main layout wiring', details='', group=None, agent_name=None), TodoItem(id='9', status='pending', priority='medium', content='Run lint, fix errors, verify app builds correctly', details='', group=None, agent_name=None)], command='create', thought='', action=<ActionType.TODO: 'todo'>, content='')
+</action>
+<observation>
+TodoObservation(content='<system-reminder>\nYour todo list has changed. Here are the latest contents of your todo list:\n\n1. Set up project structure, install dependencies, configure vite/tsconfig *high* [pending]\n\n2. Build design system: global CSS, color tokens, typography, animations *high* [pending]\n\n3. Build API service layer: Finnhub, Alpha Vantage, NewsAPI clients + debate engine *high* [pending]\n\n4. Build Left Navigation component (Bloomberg-style collapsible) *high* [pending]\n\n5. Build Landing/Home page with animated hero, live ticker, feature cards *high* [pending]\n\n6. Build AI Investment Committee page with 3-column debate, news timeline, confidence meters *high* [pending]\n\n7. Build Market Overview Dashboard with tabs, data grid, sparklines, top movers *high* [pending]\n\n8. Build app shell, routing, main layout wiring *high* [pending]\n\n9. Run lint, fix errors, verify app builds correctly *medium* [pending]\n</system-reminder>', state=TodoState(items=[TodoItem(id='1', status='pending', priority='high', content='Set up project structure, install dependencies, configure vite/tsconfig', details='', group=None, agent_name=None), TodoItem(id='2', status='pending', priority='high', content='Build design system: global CSS, color tokens, typography, animations', details='', group=None, agent_name=None), TodoItem(id='3', status='pending', priority='high', content='Build API service layer: Finnhub, Alpha Vantage, NewsAPI clients + debate engine', details='', group=None, agent_name=None), TodoItem(id='4', status='pending', priority='high', content='Build Left Navigation component (Bloomberg-style collapsible)', details='', group=None, agent_name=None), TodoItem(id='5', status='pending', priority='high', content='Build Landing/Home page with animated hero, live ticker, feature cards', details='', group=None, agent_name=None), TodoItem(id='6', status='pending', priority='high', content='Build AI Investment Committee page with 3-column debate, news timeline, confidence meters', details='', group=None, agent_name=None), TodoItem(id='7', status='pending', priority='high', content='Build Market Overview Dashboard with tabs, data grid, sparklines, top movers', details='', group=None, agent_name=None), TodoItem(id='8', status='pending', priority='high', content='Build app shell, routing, main layout wiring', details='', group=None, agent_name=None), TodoItem(id='9', status='pending', priority='medium', content='Run lint, fix errors, verify app builds correctly', details='', group=None, agent_name=None)], updated_at='2026-05-18T22:03:57.973139+00:00'), system_reminder='', observation=<ObservationType.TODO: 'todo'>)
+</observation>
+<action>
+**CmdRunAction (source=EventSource.AGENT, is_input=False)**
+COMMAND:
+ls /workspace/app-bqfaw566pqf5 && cat /workspace/app-bqfaw566pqf5/package.json 2>/dev/null || echo "NO_PACKAGE_JSON"
+</action>
+<observation>
+**CmdOutputObservation (source=EventSource.AGENT, exit code=0, metadata={
+  "exit_code": 0,
+  "pid": -1,
+  "username": null,
+  "hostname": null,
+  "working_dir": "/workspace",
+  "py_interpreter_path": null,
+  "prefix": "",
+  "suffix": "\n[The command completed with exit code 0.]"
+})**
+--BEGIN AGENT OBSERVATION--
+biome.json
+components.json
+docs
+index.html
+node_modules
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+postcss.config.js
+public
+README.md
+sgconfig.yml
+src
+tailwind.config.js
+tasks
+tsconfig.app.json
+tsconfig.check.json
+tsconfig.json
+tsconfig.node.json
+vite.config.dev.ts
+vite.config.ts
+{
+  "name": "miaoda-react-admin",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Do not use this command, only use lint to check'",
+    "build": "echo 'Do not use this command, only use lint to check'",
+    "lint": "tsgo -p tsconfig.check.json; npx biome lint; .rules/check.sh;npx tailwindcss -i ./src/index.css -o /dev/null 2>&1 | grep -E '^(CssSyntaxError|Error):.*' || true;.rules/testBuild.sh"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-aspect-ratio": "^1.1.7",
+    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-hover-card": "^1.1.15",
+    "@radix-ui/react-icons": "^1.3.2",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-menubar": "^1.1.16",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-radio-group": "^1.3.8",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@supabase/supabase-js": "2.103.1",
+    "axios": "^1.13.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "eventsource-parser": "^3.0.6",
+    "input-otp": "^1.4.2",
+    "ky": "^1.13.0",
+    "lucide-react": "^0.576.0",
+    "miaoda-auth-react": "2.0.6",
+    "miaoda-sc-plugin": "1.0.61",
+    "motion": "^12.23.25",
+    "next-themes": "^0.4.6",
+    "qrcode": "^1.5.4",
+    "react": "^18.0.0",
+    "react-day-picker": "^9.13.0",
+    "react-dom": "^18.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-helmet-async": "^2.0.5",
+    "react-hook-form": "^7.66.0",
+    "react-resizable-panels": "^2.1.8",
+    "react-router": "^7.9.5",
+    "react-router-dom": "^7.9.5",
+    "recharts": "2.15.4",
+    "sonner": "^2.0.7",
+    "streamdown": "^1.4.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-intersect": "^2.2.0",
+    "vaul": "^1.1.2",
+    "video-react": "^0.16.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.5",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@types/bmapgl": "^0.0.7",
+    "@types/lodash": "^4.17.24",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@types/video-react": "^0.15.8",
+    "@typescript/native-preview": "7.0.0-dev.20260303.1",
+    "@vitejs/plugin-react": "^5.1.4",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.11",
+    "typescript": "~5.9.3",
+    "vite": "npm:rolldown-vite@latest",
+    "vite-plugin-svgr": "^4.5.0"
+  }
+}
+[The command completed with exit code 0.]
+[Current working directory: /workspace]
+--END AGENT OBSERVATION--
+</observation>
+<action>
+**CmdRunAction (source=EventSource.AGENT, is_input=False)**
+COMMAND:
+ls /workspace/app-bqfaw566pqf5/src && cat /workspace/app-bqfaw566pqf5/src/index.css | head -60
+</action>
+<observation>
+**CmdOutputObservation (source=EventSource.AGENT, exit code=0, metadata={
+  "exit_code": 0,
+  "pid": -1,
+  "username": null,
+  "hostname": null,
+  "working_dir": "/workspace",
+  "py_interpreter_path": null,
+  "prefix": "",
+  "suffix": "\n[The command completed with exit code 0.]"
+})**
+--BEGIN AGENT OBSERVATION--
+App.tsx
+components
+contexts
+global.d.ts
+hooks
+index.css
+lib
+main.tsx
+pages
+routes.tsx
+services
+svg.d.ts
+types
+vite-env.d.ts
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 210 40% 98%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+[The command completed with exit code 0.]
+[Current working directory: /workspace]
+--END AGENT OBSERVATION--
+</observation>
+<action>
+**CmdRunAction (source=EventSource.AGENT, is_input=False)**
+COMMAND:
+cat /workspace/app-bqfaw566pqf5/src/routes.tsx && cat /workspace/app-bqfaw566pqf5/src/App.tsx
+</action>
+<observation>
+**CmdOutputObservation (source=EventSource.AGENT, exit code=0, metadata={
+  "exit_code": 0,
+  "pid": -1,
+  "username": null,
+  "hostname": null,
+  "working_dir": "/workspace",
+  "py_interpreter_path": null,
+  "prefix": "",
+  "suffix": "\n[The command completed with exit code 0.]"
+})**
+--BEGIN AGENT OBSERVATION--
+import SamplePage from './pages/SamplePage';
+import type { ReactNode } from 'react';
+
+export interface RouteConfig {
+  name: string;
+  path: string;
+  element: ReactNode;
+  visible?: boolean;
+  /** Accessible without login. Routes without this flag require authentication. Has no effect when RouteGuard is not in use. */
+  public?: boolean;
+}
+
+export const routes: RouteConfig[] = [
+  {
+    name: 'Sample Page',
+    path: '/',
+    element: <SamplePage />,
+    public: true,
+  }
+];
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import IntersectObserver from '@/components/common/IntersectObserver';
+import { Toaster } from '@/components/ui/sonner';
+
+import { routes } from './routes';
+
+// import { AuthProvider } from '@/contexts/AuthContext';
+// import { RouteGuard } from '@/components/common/RouteGuard';
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      {/*<AuthProvider>*/}
+      {/*<RouteGuard>*/}
+      <IntersectObserver />
+      <div className="flex flex-col min-h-screen">
+        {/*<Header />*/}
+        <main className="flex-grow">
+          <Routes>
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={route.element}
+            />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </div>
+      <Toaster />
+      {/*</RouteGuard>*/}
+      {/*</AuthProvider>*/}
+    </Router>
+  );
+};
+
+export default App;
+[The command completed with exit code 0.]
+[Current working directory: /workspace]
+--END AGENT OBSERVATION--
+</observation>
+<action>
+TodoAction(todos=[TodoItem(id='1', status='in_progress', priority='high', content='Set up project structure, install dependencies, configure vite/tsconfig', details='', group=None, agent_name=None)], command='update', thought='', action=<ActionType.TODO: 'todo'>, content='')
+</action>
+<observation>
+TodoObservation(content='<system-reminder>\nYour todo list has changed. Here are the latest contents of your todo list:\n\n1. Set up project structure, install dependencies, configure vite/tsconfig *high* [in_progress]\n\n2. Build design system: global CSS, color tokens, typography, animations *high* [pending]\n\n3. Build API service layer: Finnhub, Alpha Vantage, NewsAPI clients + debate engine *high* [pending]\n\n4. Build Left Navigation component (Bloomberg-style collapsible) *high* [pending]\n\n5. Build Landing/Home page with animated hero, live ticker, feature cards *high* [pending]\n\n6. Build AI Investment Committee page with 3-column debate, news timeline, confidence meters *high* [pending]\n\n7. Build Market Overview Dashboard with tabs, data grid, sparklines, top movers *high* [pending]\n\n8. Build app shell, routing, main layout wiring *high* [pending]\n\n9. Run lint, fix errors, verify app builds correctly *medium* [pending]\n</system-reminder>', state=TodoState(items=[TodoItem(id='1', status='in_progress', priority='high', content='Set up project structure, install dependencies, configure vite/tsconfig', details='', group=None, agent_name=None), TodoItem(id='2', status='pending', priority='high', content='Build design system: global CSS, color tokens, typography, animations', details='', group=None, agent_name=None), TodoItem(id='3', status='pending', priority='high', content='Build API service layer: Finnhub, Alpha Vantage, NewsAPI clients + debate engine', details='', group=None, agent_name=None), TodoItem(id='4', status='pending', priority='high', content='Build Left Navigation component (Bloomberg-style collapsible)', details='', group=None, agent_name=None), TodoItem(id='5', status='pending', priority='high', content='Build Landing/Home page with animated hero, live ticker, feature cards', details='', group=None, agent_name=None), TodoItem(id='6', status='pending', priority='high', content='Build AI Investment Committee page with 3-column debate, news timeline, confidence meters', details='', group=None, agent_name=None), TodoItem(id='7', status='pending', priority='high', content='Build Market Overview Dashboard with tabs, data grid, sparklines, top movers', details='', group=None, agent_name=None), TodoItem(id='8', status='pending', priority='high', content='Build app shell, routing, main layout wiring', details='', group=None, agent_name=None), TodoItem(id='9', status='pending', priority='medium', content='Run lint, fix errors, verify app builds correctly', details='', group=None, agent_name=None)], updated_at='2026-05-18T22:04:09.930391+00:00'), system_reminder='', observation=<ObservationType.TODO: 'todo'>)
+</observation>
+<action>
+**CmdRunAction (source=EventSource.AGENT, is_input=False)**
+COMMAND:
+ls /workspace/app-bqfaw566pqf5/src/pages/ && ls /workspace/app-bqfaw566pqf5/src/components/
+</action>
+<observation>
+**CmdOutputObservation (source=EventSource.AGENT, exit code=0, metadata={
+  "exit_code": 0,
+  "pid": -1,
+  "username": null,
+  "hostname": null,
+  "working_dir": "/workspace",
+  "py_interpreter_path": null,
+  "prefix": "",
+  "suffix": "\n[The command completed with exit code 0.]"
+})**
+--BEGIN AGENT OBSERVATION--
+NotFound.tsx
+SamplePage.tsx
+common
+dropzone.tsx
+ui
+[The command completed with exit code 0.]
+[Current working directory: /workspace]
+--END AGENT OBSERVATION--
+</observation>
+<action>
+**FileEditAction**
+Path: [/workspace/app-bqfaw566pqf5/src/index.css]
+Thought: Now I have a clear picture. Let me build the full Quantara Markets platform. I'll use the existing React + Tailwind + shadcn/ui stack but with a custom Bloomberg-style design system layered on top.
+Command: str_replace
+Old String: ```
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 210 40% 98%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+```
+New String: ```
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Quantara Markets — Bloomberg Terminal Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --radius: 0.375rem;
+    /* Bloomberg dark palette */
+    --qm-bg0: 220 13% 7%;
+    --qm-bg1: 225 14% 10%;
+    --qm-bg2: 224 18% 14%;
+    --qm-bg3: 224 16% 18%;
+    --qm-bg4: 224 14% 22%;
+    --qm-brand: 220 100% 57%;
+    --qm-brand-lt: 216 76% 64%;
+    --qm-brand-dk: 220 80% 46%;
+    --qm-up: 174 63% 40%;
+    --qm-dn: 0 82% 61%;
+    --qm-warn: 36 100% 50%;
+    --qm-text0: 0 0% 100%;
+    --qm-text1: 220 12% 85%;
+    --qm-text2: 220 8% 54%;
+    --qm-text3: 220 6% 38%;
+    --qm-border0: 224 18% 14%;
+    --qm-border1: 224 16% 18%;
+    --qm-border2: 224 14% 22%;
+
+    /* shadcn tokens mapped to Bloomberg dark */
+    --background: 220 13% 7%;
+    --foreground: 220 12% 85%;
+    --card: 225 14% 10%;
+    --card-foreground: 220 12% 85%;
+    --popover: 224 18% 14%;
+    --popover-foreground: 220 12% 85%;
+    --primary: 220 100% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 16% 18%;
+    --secondary-foreground: 220 12% 85%;
+    --muted: 224 16% 18%;
+    --muted-foreground: 220 8% 54%;
+    --accent: 224 14% 22%;
+    --accent-foreground: 220 12% 85%;
+    --destructive: 0 82% 61%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 18% 14%;
+    --input: 224 16% 18%;
+    --ring: 220 100% 57%;
+    --chart-1: 220 100% 57%;
+    --chart-2: 174 63% 40%;
+    --chart-3: 0 82% 61%;
+    --chart-4: 36 100% 50%;
+    --chart-5: 216 76% 64%;
+    --sidebar-background: 225 14% 10%;
+    --sidebar-foreground: 220 12% 85%;
+    --sidebar-primary: 220 100% 57%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 16% 18%;
+    --sidebar-accent-foreground: 220 12% 85%;
+    --sidebar-border: 224 18% 14%;
+    --sidebar-ring: 220 100% 57%;
+  }
+
+  .dark {
+    --background: 220 13% 7%;
+    --foreground: 220 12% 85%;
+    --card: 225 14% 10%;
+    --card-foreground: 220 12% 85%;
+    --popover: 224 18% 14%;
+    --popover-foreground: 220 12% 85%;
+    --primary: 220 100% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 16% 18%;
+    --secondary-foreground: 220 12% 85%;
+    --muted: 224 16% 18%;
+    --muted-foreground: 220 8% 54%;
+```
+
+</action>
