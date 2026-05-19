@@ -8,12 +8,18 @@ import { useNavigate } from 'react-router-dom';
 import {
   RefreshCw, AlertTriangle, TrendingUp, TrendingDown, Scale,
   Newspaper, ChevronDown, CheckCircle, XCircle, Clock,
-  Activity, BarChart2,
+  Activity, BarChart2, History, Database,
 } from 'lucide-react';
 import { fetchFinnhubQuote, fetchFinnhubNews } from '@/services/finnhub';
 import { fetchNewsForAsset } from '@/services/newsapi';
 import { runDebate, DebateResult } from '@/services/debateEngine';
 import { COMMITTEE_ASSETS, MOCK_PRICES } from '@/types/market';
+import {
+  saveDebateSession,
+  loadRecentDebates,
+  loadDebateStats,
+  DbDebateSession,
+} from '@/services/db';
 
 const T = {
   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39',
@@ -48,6 +54,19 @@ export default function AICommitteePage() {
   const [roundKey, setRoundKey] = useState(0);
   const abortRef = useRef<AbortController | null>(null);
 
+  // ── DB state ──────────────────────────────────────────────────────────────
+  const [savedId, setSavedId] = useState<string | null>(null);
+  const [recentDebates, setRecentDebates] = useState<DbDebateSession[]>([]);
+  const [stats, setStats] = useState<{ verdict: string; count: number }[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [dbSaving, setDbSaving] = useState(false);
+
+  // Load history whenever asset changes
+  useEffect(() => {
+    loadRecentDebates(asset, 8).then(setRecentDebates);
+    loadDebateStats(asset).then(setStats);
+  }, [asset]);
+
   const runFullDebate = useCallback(async (sym: string) => {
     if (abortRef.current) abortRef.current.abort();
     abortRef.current = new AbortController();
@@ -55,6 +74,7 @@ export default function AICommitteePage() {
     setError(null);
     setDebate(null);
     setNewsItems([]);
+    setSavedId(null);
 
     setPhase('fetching');
     await sleep(400);
@@ -110,6 +130,16 @@ export default function AICommitteePage() {
       setDebate(result);
       setPhase('done');
       setRoundKey((k) => k + 1);
+
+      // ── Save debate to Supabase ──────────────────────────────────────────
+      setDbSaving(true);
+      saveDebateSession(result).then((id) => {
+        setSavedId(id);
+        setDbSaving(false);
+        // Refresh history
+        loadRecentDebates(sym, 8).then(setRecentDebates);
+        loadDebateStats(sym).then(setStats);
+      });
     } catch {
       setError('Debate engine encountered an error. Please retry.');
       setPhase('idle');
@@ -238,6 +268,35 @@ export default function AICommitteePage() {
             <RefreshCw size={11} className={isLoading ? 'animate-spin' : ''} />
             {isLoading ? 'Deliberating...' : 'Rerun Debate'}
           </button>
+
+          {/* DB save status indicator */}
+          {dbSaving && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', color: T.text3 }}>
+              <Database size={10} className="animate-spin" />
+              Saving…
+            </div>
+          )}
+          {savedId && !dbSaving && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', color: T.up }}>
+              <Database size={10} />
+              Saved
+            </div>
+          )}
+
+          {/* History toggle */}
+          <button
+            onClick={() => setShowHistory((v) => !v)}
+            style={{
+              background: showHistory ? T.bg3 : 'transparent',
+              border: `1px solid ${T.border1}`,
+              borderRadius: '4px', padding: '6px 10px',
+              color: T.text2, fontSize: '11px',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px',
+            }}
+          >
+            <History size={11} />
+            Historique
+          </button>
         </div>
       </div>
 
@@ -321,8 +380,172 @@ export default function AICommitteePage() {
           />
         </div>
 
+        {/* History + Stats panel */}
+        {showHistory && (
+          <DebateHistoryPanel
+            debates={recentDebates}
+            stats={stats}
+            asset={asset}
+          />
+        )}
+
         {/* News Timeline */}
         <NewsTimeline items={newsItems} loading={isLoading} asset={asset} />
+      </div>
+    </div>
+  );
+}
+
+// ─── Debate History Panel ─────────────────────────────────────────────────────
+
+function DebateHistoryPanel({
+  debates,
+  stats,
+  asset,
+}: {
+  debates: DbDebateSession[];
+  stats: { verdict: string; count: number }[];
+  asset: string;
+}) {
+  const verdictColor = (v: string) => {
+    if (v.includes('BUY') && !v.includes('AVOID')) return T.up;
+    if (v.includes('AVOID') || v.includes('BEAR')) return T.dn;
+    if (v === 'HOLD') return T.warn;
+    return T.text3;
+  };
+
+  const totalDebates = stats.reduce((s, r) => s + r.count, 0);
+
+  return (
+    <div style={{
+      background: T.bg1,
+      border: `1px solid ${T.border0}`,
+      borderRadius: '8px',
+      overflow: 'hidden',
+      marginBottom: '12px',
+    }}>
+      {/* Header */}
+      <div style={{
+        padding: '10px 14px',
+        borderBottom: `1px solid ${T.border0}`,
+        display: 'flex', alignItems: 'center', gap: '8px',
+      }}>
+        <History size={13} color={T.text3} />
+        <span style={{ fontSize: '11px', fontWeight: 700, color: T.text0 }}>
+          HISTORIQUE DES DÉBATS — {asset}
+        </span>
+        <span style={{ fontSize: '10px', color: T.text3 }}>
+          {totalDebates} analyse{totalDebates !== 1 ? 's' : ''} enregistrée{totalDebates !== 1 ? 's' : ''}
+        </span>
+        <Database size={10} color={T.brand} style={{ marginLeft: 'auto' }} />
+      </div>
+
+      <div style={{ display: 'flex', gap: 0 }}>
+        {/* Stats sidebar */}
+        {stats.length > 0 && (
+          <div style={{
+            width: '180px',
+            flexShrink: 0,
+            borderRight: `1px solid ${T.border0}`,
+            padding: '12px',
+          }}>
+            <div style={{ fontSize: '9px', fontWeight: 700, color: T.text3, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '10px' }}>
+              Répartition des verdicts
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {stats.map(({ verdict, count }) => {
+                const pct = totalDebates > 0 ? (count / totalDebates) * 100 : 0;
+                const color = verdictColor(verdict);
+                return (
+                  <div key={verdict}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                      <span style={{ fontSize: '9px', color, fontWeight: 600 }}>{verdict}</span>
+                      <span style={{ fontSize: '9px', color: T.text3, fontFamily: 'JetBrains Mono, monospace' }}>
+                        {count}
+                      </span>
+                    </div>
+                    <div style={{ height: '3px', background: T.bg3, borderRadius: '2px' }}>
+                      <div style={{
+                        height: '100%', borderRadius: '2px',
+                        background: color, width: `${pct}%`,
+                        transition: 'width 0.6s ease',
+                      }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Debate rows */}
+        <div style={{ flex: 1, overflow: 'auto', maxHeight: '220px' }}>
+          {debates.length === 0 ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: T.text3, fontSize: '12px' }}>
+              Aucune analyse précédente. Lancez un débat pour le sauvegarder.
+            </div>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
+              <thead>
+                <tr style={{ borderBottom: `1px solid ${T.border0}` }}>
+                  {['Date', 'Verdict', 'Confiance', 'Bull %', 'Bear %'].map((h) => (
+                    <th key={h} style={{
+                      padding: '6px 12px', textAlign: 'left',
+                      fontSize: '9px', fontWeight: 700, color: T.text3,
+                      letterSpacing: '0.8px', textTransform: 'uppercase',
+                      position: 'sticky', top: 0, background: T.bg1,
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {debates.map((d, i) => {
+                  const color = verdictColor(d.verdict);
+                  const date = new Date(d.created_at);
+                  return (
+                    <tr
+                      key={d.id}
+                      style={{
+                        borderBottom: i < debates.length - 1 ? `1px solid ${T.border0}` : 'none',
+                        transition: 'background 0.12s',
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = T.bg2; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                    >
+                      <td style={{ padding: '7px 12px', color: T.text3, fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', whiteSpace: 'nowrap' }}>
+                        {date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
+                        {' '}
+                        {date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                      <td style={{ padding: '7px 12px' }}>
+                        <span style={{
+                          color, fontWeight: 700, fontSize: '10px',
+                          fontFamily: 'JetBrains Mono, monospace',
+                        }}>{d.verdict}</span>
+                      </td>
+                      <td style={{ padding: '7px 12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ width: '50px', height: '4px', background: T.bg3, borderRadius: '2px' }}>
+                            <div style={{ height: '100%', background: color, borderRadius: '2px', width: `${d.confidence}%` }} />
+                          </div>
+                          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: T.text2 }}>
+                            {Number(d.confidence).toFixed(0)}%
+                          </span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '7px 12px', fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: T.up }}>
+                        {Number(d.bull_confidence).toFixed(0)}%
+                      </td>
+                      <td style={{ padding: '7px 12px', fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: T.dn }}>
+                        {Number(d.bear_confidence).toFixed(0)}%
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   );

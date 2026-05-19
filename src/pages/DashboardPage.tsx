@@ -6,11 +6,20 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   RefreshCw, TrendingUp, TrendingDown, Building2,
-  Bitcoin, Wheat, DollarSign, Globe, ArrowRight, BarChart2,
+  Bitcoin, Wheat, DollarSign, Globe, ArrowRight,
+  Star, StarOff, Database,
 } from 'lucide-react';
 import { fetchMultipleQuotes } from '@/services/finnhub';
 import { ASSETS_BY_CATEGORY, MOCK_PRICES, MarketAsset } from '@/types/market';
 import { Sparkline, generateSparkline } from '@/components/Sparkline';
+import {
+  savePriceSnapshots,
+  loadCachedPrices,
+  loadWatchlist,
+  addToWatchlist,
+  removeFromWatchlist,
+  DbWatchlistItem,
+} from '@/services/db';
 
 const T = {
   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39',
@@ -69,30 +78,83 @@ export default function DashboardPage() {
     'moroccan': false,
   });
 
+  // ── Watchlist DB state ────────────────────────────────────────────────────
+  const [watchlist, setWatchlist] = useState<Set<string>>(new Set());
+  const [showWatchlist, setShowWatchlist] = useState(false);
+  const [watchlistItems, setWatchlistItems] = useState<DbWatchlistItem[]>([]);
+  const [dbSynced, setDbSynced] = useState(false);
+
+  // Load watchlist from DB on mount
+  useEffect(() => {
+    loadWatchlist().then((items) => {
+      setWatchlistItems(items);
+      setWatchlist(new Set(items.map((i) => i.symbol)));
+      setDbSynced(true);
+    });
+  }, []);
+
+  const toggleWatchlist = useCallback(async (asset: AssetWithSparkline) => {
+    const inList = watchlist.has(asset.symbol);
+    if (inList) {
+      await removeFromWatchlist(asset.symbol);
+      setWatchlist((prev) => { const s = new Set(prev); s.delete(asset.symbol); return s; });
+      setWatchlistItems((prev) => prev.filter((i) => i.symbol !== asset.symbol));
+    } else {
+      await addToWatchlist(asset.symbol, asset.name, activeTab);
+      setWatchlist((prev) => new Set(prev).add(asset.symbol));
+      setWatchlistItems((prev) => [...prev, {
+        id: crypto.randomUUID(),
+        session_id: '',
+        symbol: asset.symbol,
+        name: asset.name ?? null,
+        category: activeTab,
+        added_at: new Date().toISOString(),
+      }]);
+    }
+  }, [watchlist, activeTab]);
+
   const fetchCategory = useCallback(async (cat: Category) => {
     setLoading(true);
     const symbols = ASSETS_BY_CATEGORY[cat].map((a) => a.symbol);
     const quotes = await fetchMultipleQuotes(symbols);
 
-    setAssets((prev) => ({
-      ...prev,
-      [cat]: prev[cat].map((a) => {
+    // If live API returned nothing, try DB cache
+    const liveCount = Object.keys(quotes).length;
+    const cached = liveCount === 0 ? await loadCachedPrices(symbols) : {};
+
+    // Build updated list
+    const updated: AssetWithSparkline[] = [];
+
+    setAssets((prev) => {
+      const next = prev[cat].map((a) => {
         const q = quotes[a.symbol];
         if (q && q.c > 0) {
-          return {
-            ...a,
-            price: q.c,
-            change: q.d,
-            changePct: q.dp,
-            high: q.h,
-            low: q.l,
-            sparkline: generateSparkline(q.c, q.dp),
-          };
+          const row = { ...a, price: q.c, change: q.d, changePct: q.dp, high: q.h, low: q.l, sparkline: generateSparkline(q.c, q.dp) };
+          updated.push(row);
+          return row;
+        }
+        const c = cached[a.symbol];
+        if (c) {
+          return { ...a, price: c.price, change: c.change, changePct: c.change_pct, high: c.high ?? undefined, low: c.low ?? undefined, sparkline: generateSparkline(c.price, c.change_pct) };
         }
         return a;
-      }),
-    }));
-    setLastUpdated(new Date().toLocaleTimeString('en-US', { hour12: false }));
+      });
+      return { ...prev, [cat]: next };
+    });
+
+    // Persist live prices to DB
+    if (updated.length > 0) {
+      savePriceSnapshots(updated.map((a) => ({
+        symbol: a.symbol,
+        price: a.price,
+        change: a.change,
+        changePct: a.changePct,
+        high: a.high,
+        low: a.low,
+      })));
+    }
+
+    setLastUpdated(new Date().toLocaleTimeString('fr-FR', { hour12: false }));
     setLoading(false);
   }, []);
 
@@ -146,9 +208,32 @@ export default function DashboardPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {lastUpdated && (
             <span style={{ fontSize: '10px', color: T.text3, fontFamily: 'JetBrains Mono, monospace' }}>
-              Updated {lastUpdated}
+              Mis à jour {lastUpdated}
             </span>
           )}
+          {/* DB sync indicator */}
+          {dbSynced && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3px', fontSize: '9px', color: T.up }}>
+              <Database size={9} />
+              Sync
+            </div>
+          )}
+          {/* Watchlist toggle */}
+          <button
+            onClick={() => setShowWatchlist((v) => !v)}
+            style={{
+              background: showWatchlist ? 'rgba(255,152,0,0.1)' : 'transparent',
+              border: `1px solid ${showWatchlist ? T.warn : T.border1}`,
+              borderRadius: '4px', padding: '5px 10px',
+              color: showWatchlist ? T.warn : T.text2,
+              fontSize: '11px', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '5px',
+              transition: 'all 0.15s',
+            }}
+          >
+            <Star size={11} />
+            Favoris ({watchlist.size})
+          </button>
           <button
             onClick={() => fetchCategory(activeTab)}
             disabled={loading}
@@ -164,7 +249,7 @@ export default function DashboardPage() {
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = T.border1; e.currentTarget.style.color = T.text2; }}
           >
             <RefreshCw size={11} className={loading ? 'animate-spin' : ''} />
-            Refresh
+            Actualiser
           </button>
           <button
             onClick={() => navigate('/ai-committee')}
@@ -177,16 +262,29 @@ export default function DashboardPage() {
             onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.88'; }}
             onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
           >
-            AI Committee <ArrowRight size={10} />
+            Comité IA <ArrowRight size={10} />
           </button>
         </div>
       </div>
 
       <div style={{ flex: 1, overflow: 'auto', padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {/* Watchlist panel */}
+        {showWatchlist && (
+          <WatchlistPanel
+            items={watchlistItems}
+            onRemove={async (symbol) => {
+              await removeFromWatchlist(symbol);
+              setWatchlist((prev) => { const s = new Set(prev); s.delete(symbol); return s; });
+              setWatchlistItems((prev) => prev.filter((i) => i.symbol !== symbol));
+            }}
+            onAnalyze={(symbol) => navigate('/ai-committee?asset=' + symbol)}
+          />
+        )}
+
         {/* Top Movers */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-          <MoversSection title="TOP GAINERS" assets={topGainers} type="gain" onSelect={(s) => navigate('/ai-committee?asset=' + s)} />
-          <MoversSection title="TOP LOSERS" assets={topLosers} type="loss" onSelect={(s) => navigate('/ai-committee?asset=' + s)} />
+          <MoversSection title="TOP HAUSSES" assets={topGainers} type="gain" onSelect={(s) => navigate('/ai-committee?asset=' + s)} />
+          <MoversSection title="TOP BAISSES" assets={topLosers} type="loss" onSelect={(s) => navigate('/ai-committee?asset=' + s)} />
         </div>
 
         {/* Category tabs + data grid */}
@@ -232,12 +330,12 @@ export default function DashboardPage() {
           {/* Table header */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '180px 1fr 100px 100px 90px 80px 90px',
+            gridTemplateColumns: '180px 1fr 100px 100px 90px 80px 100px',
             padding: '7px 14px',
             borderBottom: `1px solid ${T.border0}`,
             background: T.bg2,
           }}>
-            {['ASSET', 'LAST PRICE', '24H CHANGE', 'HIGH', 'LOW', 'TREND', 'ACTION'].map((h, i) => (
+            {['ACTIF', 'COURS', 'VAR. 24H', 'HAUT', 'BAS', 'TENDANCE', 'ACTION'].map((h, i) => (
               <div key={h} style={{
                 fontSize: '9px', fontWeight: 700,
                 color: T.text3, letterSpacing: '1px', textTransform: 'uppercase',
@@ -253,7 +351,9 @@ export default function DashboardPage() {
                 key={asset.symbol}
                 asset={asset}
                 index={i}
+                watched={watchlist.has(asset.symbol)}
                 onCommittee={() => navigate('/ai-committee')}
+                onToggleWatch={() => toggleWatchlist(asset)}
               />
             ))}
           </div>
@@ -263,20 +363,108 @@ export default function DashboardPage() {
   );
 }
 
+// ─── Watchlist Panel ──────────────────────────────────────────────────────────
+
+function WatchlistPanel({
+  items,
+  onRemove,
+  onAnalyze,
+}: {
+  items: DbWatchlistItem[];
+  onRemove: (symbol: string) => void;
+  onAnalyze: (symbol: string) => void;
+}) {
+  return (
+    <div style={{
+      background: T.bg1,
+      border: `1px solid rgba(255,152,0,0.2)`,
+      borderRadius: '8px',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        padding: '9px 14px',
+        borderBottom: `1px solid ${T.border0}`,
+        display: 'flex', alignItems: 'center', gap: '8px',
+      }}>
+        <Star size={12} color={T.warn} />
+        <span style={{ fontSize: '11px', fontWeight: 700, color: T.text0 }}>
+          MES FAVORIS
+        </span>
+        <span style={{ fontSize: '10px', color: T.text3 }}>
+          {items.length} actif{items.length !== 1 ? 's' : ''} suivi{items.length !== 1 ? 's' : ''}
+        </span>
+        <Database size={9} color={T.brand} style={{ marginLeft: 'auto' }} />
+        <span style={{ fontSize: '9px', color: T.text3 }}>Synchronisé</span>
+      </div>
+      {items.length === 0 ? (
+        <div style={{ padding: '20px', textAlign: 'center', color: T.text3, fontSize: '12px' }}>
+          Aucun favori. Cliquez sur ⭐ sur un actif pour l'ajouter.
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '12px' }}>
+          {items.map((item) => (
+            <div key={item.symbol} style={{
+              background: T.bg2,
+              border: `1px solid ${T.border1}`,
+              borderRadius: '6px',
+              padding: '8px 12px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+              minWidth: '160px',
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', fontWeight: 700, color: T.text0 }}>
+                  {item.symbol}
+                </div>
+                {item.name && (
+                  <div style={{ fontSize: '10px', color: T.text3 }}>{item.name}</div>
+                )}
+              </div>
+              <button
+                onClick={() => onAnalyze(item.symbol)}
+                title="Analyser avec l'IA"
+                style={{
+                  background: 'rgba(41,98,255,0.12)', border: 'none', borderRadius: '3px',
+                  padding: '3px 7px', color: T.brandLt, fontSize: '9px',
+                  fontWeight: 700, cursor: 'pointer',
+                }}
+              >
+                IA
+              </button>
+              <button
+                onClick={() => onRemove(item.symbol)}
+                title="Retirer des favoris"
+                style={{
+                  background: 'transparent', border: 'none',
+                  color: T.text3, cursor: 'pointer', padding: '2px',
+                  fontSize: '13px', lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Asset Row ────────────────────────────────────────────────────────────────
 
-function AssetRow({ asset, index, onCommittee }: {
+function AssetRow({ asset, index, onCommittee, watched, onToggleWatch }: {
   asset: AssetWithSparkline;
   index: number;
   onCommittee: () => void;
+  watched: boolean;
+  onToggleWatch: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
   const isPositive = asset.changePct >= 0;
 
   const fmtPrice = (p: number) => {
     if (!p) return '—';
-    if (p >= 10000) return p.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-    if (p >= 1000) return p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (p >= 10000) return p.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    if (p >= 1000) return p.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     if (p < 10) return p.toFixed(4);
     return p.toFixed(2);
   };
@@ -288,7 +476,7 @@ function AssetRow({ asset, index, onCommittee }: {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: 'grid',
-        gridTemplateColumns: '180px 1fr 100px 100px 90px 80px 90px',
+        gridTemplateColumns: '180px 1fr 100px 100px 90px 80px 100px',
         padding: '10px 14px',
         borderBottom: `1px solid ${T.border0}`,
         background: hovered ? T.bg2 : 'transparent',
@@ -297,12 +485,28 @@ function AssetRow({ asset, index, onCommittee }: {
         animationDelay: `${index * 40}ms`,
       }}
     >
-      {/* Asset name */}
-      <div>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: T.text0, fontFamily: 'JetBrains Mono, monospace' }}>
-          {asset.symbol}
+      {/* Asset name + watchlist star */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <button
+          onClick={onToggleWatch}
+          title={watched ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+          style={{
+            background: 'transparent', border: 'none',
+            color: watched ? T.warn : T.text3,
+            cursor: 'pointer', padding: '2px',
+            opacity: hovered || watched ? 1 : 0.4,
+            transition: 'all 0.15s',
+            flexShrink: 0,
+          }}
+        >
+          {watched ? <Star size={10} fill={T.warn} /> : <StarOff size={10} />}
+        </button>
+        <div>
+          <div style={{ fontSize: '12px', fontWeight: 700, color: T.text0, fontFamily: 'JetBrains Mono, monospace' }}>
+            {asset.symbol}
+          </div>
+          <div style={{ fontSize: '10px', color: T.text3 }}>{asset.name}</div>
         </div>
-        <div style={{ fontSize: '10px', color: T.text3 }}>{asset.name}</div>
       </div>
 
       {/* Price */}
@@ -357,7 +561,7 @@ function AssetRow({ asset, index, onCommittee }: {
             transition: 'all 0.15s',
           }}
         >
-          ANALYZE
+          ANALYSER
         </button>
       </div>
     </div>
