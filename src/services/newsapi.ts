@@ -5,7 +5,7 @@
  * and fall back to Finnhub news if unavailable.
  */
 
-const NEWS_KEY = 'v9NSpLzpbNJpH75KsmOvu8SAxSLdpw2t';
+const NEWS_KEY = import.meta.env.VITE_NEWSAPI_KEY || 'v9NSpLzpbNJpH75KsmOvu8SAxSLdpw2t';
 const BASE_URL = 'https://newsapi.org/v2';
 
 export interface NewsArticle {

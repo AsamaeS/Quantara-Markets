@@ -3,7 +3,7 @@
  * Real-time quotes, company news, sentiment
  */
 
-const FINNHUB_KEY = 'd81qdgpr01qrojfcp20gd81qdgpr01qrojfcp210';
+const FINNHUB_KEY = import.meta.env.VITE_FINNHUB_KEY || 'd81qdgpr01qrojfcp20gd81qdgpr01qrojfcp210';
 const BASE_URL = 'https://finnhub.io/api/v1';
 
 export interface FinnhubQuote {
