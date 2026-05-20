@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Newspaper, Radio, TrendingUp, TrendingDown, ExternalLink, Clock, Bookmark, Search, Filter } from 'lucide-react';
-import { fetchTopFinancialNews, NewsArticle as ApiNewsArticle } from '@/services/newsapi';
+import { fetchTopFinancialNews, NewsArticle as ApiNewsArticle, highlightKeywords } from '@/services/newsapi';
 
 const T = {
   bg0: '#0C0E12', bg1: '#131722', bg2: '#1E222D', bg3: '#2A2E39',
@@ -13,6 +13,7 @@ const T = {
   text0: '#FFFFFF', text1: '#D1D4DC', text2: '#787B86', text3: '#50535E',
   up: '#26A69A', upBg: 'rgba(38,166,154,0.10)',
   dn: '#EF5350', dnBg: 'rgba(239,83,80,0.10)',
+  warn: '#FF9800',
 };
 
 interface NewsArticle extends ApiNewsArticle {
@@ -287,7 +288,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
             }}
               onClick={() => article.url && window.open(article.url, '_blank', 'noopener,noreferrer')}
             >
-              {article.title}
+              {highlightKeywords(article.title)}
             </h3>
 
             {article.description && (
@@ -298,7 +299,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                 marginBottom: '12px',
                 lineHeight: 1.5,
               }}>
-                {article.description}
+                {highlightKeywords(article.description)}
               </p>
             )}
 
