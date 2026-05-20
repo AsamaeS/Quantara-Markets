@@ -5,7 +5,7 @@
 export interface MarketAsset {
   symbol: string;
   name: string;
-  category: 'us-equities' | 'crypto' | 'commodities' | 'forex' | 'moroccan';
+  category: 'us-equities' | 'crypto' | 'commodities' | 'forex' | 'moroccan' | 'etfs';
   price: number;
   change: number;
   changePct: number;
@@ -46,6 +46,13 @@ export const ASSETS_BY_CATEGORY: Record<string, MarketAsset[]> = {
     { symbol: 'XAGUSD', name: 'Silver Spot', category: 'commodities', price: 0, change: 0, changePct: 0 },
     { symbol: 'CL=F', name: 'Crude Oil WTI', category: 'commodities', price: 0, change: 0, changePct: 0 },
     { symbol: 'NG=F', name: 'Natural Gas', category: 'commodities', price: 0, change: 0, changePct: 0 },
+  ],
+  'etfs': [
+    { symbol: 'SPY', name: 'SPDR S&P 500 ETF', category: 'etfs', price: 0, change: 0, changePct: 0 },
+    { symbol: 'QQQ', name: 'Invesco QQQ', category: 'etfs', price: 0, change: 0, changePct: 0 },
+    { symbol: 'DIA', name: 'SPDR Dow Jones ETF', category: 'etfs', price: 0, change: 0, changePct: 0 },
+    { symbol: 'IWM', name: 'iShares Russell 2000 ETF', category: 'etfs', price: 0, change: 0, changePct: 0 },
+    { symbol: 'XLF', name: 'Financial Select Sector SPDR', category: 'etfs', price: 0, change: 0, changePct: 0 },
   ],
   'forex': [
     { symbol: 'EURUSD', name: 'EUR/USD', category: 'forex', price: 0, change: 0, changePct: 0 },
@@ -94,4 +101,9 @@ export const MOCK_PRICES: Record<string, { price: number; change: number; change
   'ATW': { price: 458.50, change: -3.20, changePct: -0.69 },
   'IAM': { price: 128.75, change: 1.50, changePct: 1.18 },
   'OCP': { price: 185.30, change: 2.80, changePct: 1.54 },
+  'SPY': { price: 512.30, change: 2.45, changePct: 0.48 },
+  'QQQ': { price: 445.80, change: -1.20, changePct: -0.27 },
+  'DIA': { price: 389.60, change: 1.85, changePct: 0.48 },
+  'IWM': { price: 208.45, change: -0.95, changePct: -0.45 },
+  'XLF': { price: 35.20, change: 0.45, changePct: 1.30 },
 };

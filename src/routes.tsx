@@ -3,7 +3,12 @@ import type { ReactNode } from 'react';
 import HomePage from './pages/HomePage';
 import AICommitteePage from './pages/AICommitteePage';
 import DashboardPage from './pages/DashboardPage';
-import PlaceholderPage from './pages/PlaceholderPage';
+import MarketPage from './pages/MarketPage';
+import AISignalsPage from './pages/AISignalsPage';
+import SentimentEnginePage from './pages/SentimentEnginePage';
+import NewsPage from './pages/NewsPage';
+import PortfolioPage from './pages/PortfolioPage';
+import RiskDashboardPage from './pages/RiskDashboardPage';
 import { TerminalShell } from './components/TerminalShell';
 
 export interface RouteConfig {
@@ -39,22 +44,18 @@ export const routes: RouteConfig[] = [
     public: true,
   },
   // Market sub-pages
-  { name: 'US Markets', path: '/markets/us', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Casablanca Exchange', path: '/markets/casablanca', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Commodities', path: '/markets/commodities', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'ETFs', path: '/markets/etfs', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Crypto', path: '/markets/crypto', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Forex', path: '/markets/forex', element: withShell(<PlaceholderPage />), public: true },
+  { name: 'US Equities', path: '/markets/us', element: withShell(<MarketPage category="us-equities" />), public: true },
+  { name: 'Casablanca Exchange', path: '/markets/casablanca', element: withShell(<MarketPage category="moroccan" />), public: true },
+  { name: 'Commodities', path: '/markets/commodities', element: withShell(<MarketPage category="commodities" />), public: true },
+  { name: 'ETFs', path: '/markets/etfs', element: withShell(<MarketPage category="etfs" />), public: true },
+  { name: 'Crypto & Blockchain', path: '/markets/crypto', element: withShell(<MarketPage category="crypto" />), public: true },
+  { name: 'Forex', path: '/markets/forex', element: withShell(<MarketPage category="forex" />), public: true },
   // Intelligence pages
-  { name: 'AI Signals', path: '/intelligence', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Sentiment Engine', path: '/sentiment', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Prediction Engine', path: '/prediction', element: withShell(<PlaceholderPage />), public: true },
+  { name: 'AI Signals', path: '/intelligence', element: withShell(<AISignalsPage />), public: true },
+  { name: 'Sentiment Engine', path: '/sentiment', element: withShell(<SentimentEnginePage />), public: true },
   // News pages
-  { name: 'Market Intelligence', path: '/news/market', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Economic Calendar', path: '/news/calendar', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Earnings Events', path: '/news/earnings', element: withShell(<PlaceholderPage />), public: true },
+  { name: 'Market Intelligence', path: '/news/market', element: withShell(<NewsPage />), public: true },
   // Analytics pages
-  { name: 'Portfolio', path: '/portfolio', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Risk Dashboard', path: '/risk', element: withShell(<PlaceholderPage />), public: true },
-  { name: 'Correlation Matrix', path: '/correlation', element: withShell(<PlaceholderPage />), public: true },
+  { name: 'Portfolio', path: '/portfolio', element: withShell(<PortfolioPage />), public: true },
+  { name: 'Risk Dashboard', path: '/risk', element: withShell(<RiskDashboardPage />), public: true },
 ];

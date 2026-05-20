@@ -55,7 +55,6 @@ const NAV_SECTIONS: NavSection[] = [
       { label: 'AI Signals', path: '/intelligence', icon: <Target size={12} /> },
       { label: 'AI Investment Committee', path: '/ai-committee', icon: <Scale size={12} />, badge: 'LIVE' },
       { label: 'Sentiment Engine', path: '/sentiment', icon: <Activity size={12} /> },
-      { label: 'Prediction Engine', path: '/prediction', icon: <Cpu size={12} /> },
     ],
   },
   {
@@ -64,8 +63,6 @@ const NAV_SECTIONS: NavSection[] = [
     defaultOpen: false,
     items: [
       { label: 'Market Intelligence', path: '/news/market', icon: <Radio size={12} /> },
-      { label: 'Economic Calendar', path: '/news/calendar', icon: <Calendar size={12} /> },
-      { label: 'Earnings Events', path: '/news/earnings', icon: <DollarSign size={12} /> },
     ],
   },
   {
@@ -75,7 +72,6 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: 'Portfolio', path: '/portfolio', icon: <Briefcase size={12} /> },
       { label: 'Risk Dashboard', path: '/risk', icon: <Shield size={12} /> },
-      { label: 'Correlation Matrix', path: '/correlation', icon: <Link2 size={12} /> },
     ],
   },
 ];
