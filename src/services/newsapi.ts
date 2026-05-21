@@ -140,8 +140,16 @@ const MOCK_NEWS_DATA: NewsArticle[] = [
 ];
 
 const generateMoreMockNews = (count: number): NewsArticle[] => {
-  const sources = ['Bloomberg', 'Reuters', 'CNBC', 'Financial Times', 'WSJ', 'MarketWatch', 'Forbes', 'CoinDesk', 'CryptoSlate', 'Yahoo Finance'];
-  const authors = ['Sarah Johnson', 'Michael Chen', 'Emily Rodriguez', 'David Wilson', 'Alex Turner', 'Jennifer Lee', 'Robert Kim', 'Sophie Martinez', 'Daniel Park', 'Lisa Thompson'];
+  const sources = [
+    'Bloomberg', 'Reuters', 'CNBC', 'Financial Times', 'Wall Street Journal', 
+    'MarketWatch', 'Forbes', 'CoinDesk', 'CryptoSlate', 'Yahoo Finance',
+    'BBC Business', 'The Economist', 'Fortune', 'Business Insider'
+  ];
+  const authors = [
+    'Sarah Johnson', 'Michael Chen', 'Emily Rodriguez', 'David Wilson', 
+    'Alex Turner', 'Jennifer Lee', 'Robert Kim', 'Sophie Martinez', 
+    'Daniel Park', 'Lisa Thompson', 'James Wilson', 'Maria Garcia'
+  ];
   const keywords = ['stock', 'crypto', 'market', 'AI', 'earnings', 'investment', 'growth', 'decline', 'surge', 'drop'];
   const positiveTitles = [
     'Company X Reports Record Quarter, Stock Soars',
@@ -149,6 +157,8 @@ const generateMoreMockNews = (count: number): NewsArticle[] => {
     'Market Rally Continues as Investor Confidence Grows',
     'Crypto Prices Surge on Positive Regulatory News',
     'Analysts Upgrade Stock to Strong Buy',
+    'Economic Growth Exceeds Expectations in Q2',
+    'New Trade Deal Boosts Market Sentiment',
   ];
   const negativeTitles = [
     'Company Y Misses Earnings Expectations',
@@ -156,6 +166,8 @@ const generateMoreMockNews = (count: number): NewsArticle[] => {
     'Market Pulls Back After Recent Gains',
     'Crypto Prices Decline Amid Volatility',
     'Analysts Downgrade Stock to Sell',
+    'Inflation Concerns Weigh on Markets',
+    'Geopolitical Tensions Rise',
   ];
   const neutralTitles = [
     'Federal Reserve Announces New Policy Update',
@@ -163,6 +175,8 @@ const generateMoreMockNews = (count: number): NewsArticle[] => {
     'Market Watch: What to Expect This Week',
     'Industry Experts Discuss Future Trends',
     'Company Z Unveils New Product Line',
+    'Central Bank Holds Interest Rates Steady',
+    'Annual Economic Forum Kicks Off',
   ];
 
   const articles: NewsArticle[] = [];
