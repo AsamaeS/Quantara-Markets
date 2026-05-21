@@ -288,7 +288,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
             }}
               onClick={() => article.url && window.open(article.url, '_blank', 'noopener,noreferrer')}
             >
-              {highlightKeywords(article.title)}
+              {article.title}
             </h3>
 
             {article.description && (
@@ -299,7 +299,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                 marginBottom: '12px',
                 lineHeight: 1.5,
               }}>
-                {highlightKeywords(article.description)}
+                {article.description}
               </p>
             )}
 

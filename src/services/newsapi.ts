@@ -275,16 +275,8 @@ export function inferSentiment(text: string): 'positive' | 'negative' | 'neutral
   return 'neutral';
 }
 
-export function highlightKeywords(text: string): React.ReactNode {
+export function highlightKeywords(text: string): string {
   if (!text) return text;
-  const words = KEYWORDS_TO_HIGHLIGHT.sort((a, b) => b.length - a.length);
-  const regex = new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
-  const parts = text.split(regex);
-  return parts.map((part, index) => {
-    if (words.some(w => w.toLowerCase() === part.toLowerCase())) {
-      return <mark key={index} style={{ background: 'rgba(41, 98, 255, 0.3)', color: '#5B8DEF', padding: '1px 4px', borderRadius: '3px' }}>{part}</mark>;
-    }
-    return part;
-  });
+  return text;
 }
 
