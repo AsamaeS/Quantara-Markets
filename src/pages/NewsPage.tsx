@@ -236,30 +236,32 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
       style={{
         background: T.bg1,
         border: `1px solid ${T.border0}`,
-        borderRadius: '8px',
+        borderRadius: '12px',
         overflow: 'hidden',
         transition: 'all 0.2s',
+        cursor: 'pointer',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={() => article.url && window.open(article.url, '_blank', 'noopener,noreferrer')}
     >
-      <div style={{ padding: '14px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+      <div style={{ padding: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
           {article.urlToImage && (
             <div style={{
-              width: '120px',
-              height: '80px',
+              width: '160px',
+              height: '100px',
               backgroundImage: `url(${article.urlToImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              borderRadius: '6px',
+              borderRadius: '8px',
               flexShrink: 0,
             }} />
           )}
           <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center' }}>
               <span style={{
-                fontSize: '9px',
+                fontSize: '10px',
                 fontWeight: 700,
                 color: T.text3,
                 textTransform: 'uppercase',
@@ -268,9 +270,9 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                 {article.category.toUpperCase()}
               </span>
               <span style={{
-                fontSize: '9px',
-                padding: '2px 6px',
-                borderRadius: '3px',
+                fontSize: '10px',
+                padding: '3px 8px',
+                borderRadius: '4px',
                 background: sentimentBg,
                 color: sentimentColor,
                 fontWeight: 600,
@@ -280,63 +282,60 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
             </div>
 
             <h3 style={{
-              fontSize: '14px',
+              fontSize: '16px',
               fontWeight: 700,
               color: hovered ? T.brandLt : T.text0,
               margin: 0,
-              marginBottom: '8px',
-              lineHeight: 1.4,
-              cursor: 'pointer',
+              marginBottom: '10px',
+              lineHeight: 1.5,
               transition: 'color 0.15s',
-            }}
-              onClick={() => article.url && window.open(article.url, '_blank', 'noopener,noreferrer')}
-            >
+            }}>
               {article.title}
             </h3>
 
             {article.description && (
               <p style={{
-                fontSize: '12px',
+                fontSize: '13px',
                 color: T.text2,
                 margin: 0,
-                marginBottom: '12px',
-                lineHeight: 1.5,
+                marginBottom: '16px',
+                lineHeight: 1.6,
               }}>
                 {article.description}
               </p>
             )}
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <span style={{ fontSize: '10px', color: T.text3, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Newspaper size={10} />
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', color: T.text3, display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Newspaper size={12} />
                   {article.source.name}
                 </span>
-                <span style={{ fontSize: '10px', color: T.text3, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Clock size={10} />
+                <span style={{ fontSize: '11px', color: T.text3, display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <Clock size={12} />
                   {formatDate(article.publishedAt)}
                 </span>
                 {article.author && (
-                  <span style={{ fontSize: '10px', color: T.text3 }}>
+                  <span style={{ fontSize: '11px', color: T.text3 }}>
                     Par {article.author}
                   </span>
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '6px' }}>
+              <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
                 <button
                   onClick={onToggleBookmark}
                   style={{
-                    padding: '6px 10px',
+                    padding: '8px 14px',
                     background: 'transparent',
                     border: `1px solid ${T.border1}`,
-                    borderRadius: '4px',
+                    borderRadius: '6px',
                     color: bookmarked ? T.warn : T.text2,
-                    fontSize: '10px',
+                    fontSize: '11px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: '5px',
                     transition: 'all 0.15s',
                   }}
                   onMouseEnter={(e) => {
@@ -348,7 +347,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                     e.currentTarget.style.color = bookmarked ? T.warn : T.text2;
                   }}
                 >
-                  <Bookmark size={12} fill={bookmarked ? T.warn : 'none'} />
+                  <Bookmark size={14} fill={bookmarked ? T.warn : 'none'} />
                   {bookmarked ? 'Enregistré' : 'Enregistrer'}
                 </button>
 
@@ -358,17 +357,17 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      padding: '6px 12px',
+                      padding: '8px 16px',
                       background: T.brand,
                       border: 'none',
-                      borderRadius: '4px',
+                      borderRadius: '6px',
                       color: '#fff',
-                      fontSize: '10px',
+                      fontSize: '11px',
                       fontWeight: 600,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '4px',
+                      gap: '5px',
                       textDecoration: 'none',
                       transition: 'opacity 0.15s',
                     }}
@@ -376,7 +375,7 @@ function NewsCard({ article, bookmarked, onToggleBookmark, formatDate }: {
                     onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
                   >
                     Lire l'article
-                    <ExternalLink size={10} />
+                    <ExternalLink size={12} />
                   </a>
                 )}
               </div>
