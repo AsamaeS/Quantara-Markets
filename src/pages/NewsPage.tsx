@@ -27,6 +27,7 @@ const CATEGORIES = [
   { id: 'tech', label: 'Tech' },
   { id: 'crypto', label: 'Crypto' },
   { id: 'economy', label: 'Économie' },
+  { id: 'forums', label: 'Forums' },
 ];
 
 export default function NewsPage() {
@@ -47,7 +48,7 @@ export default function NewsPage() {
       const newsWithIds = articles.map((article, index) => ({
         ...article,
         id: `news-${index}-${Date.now()}`,
-        category: inferCategory(article.title + ' ' + (article.description || '')),
+        category: inferCategory(article.title + ' ' + (article.description || ''), article.source.name),
       }));
       setNews(newsWithIds);
     } catch (error) {
@@ -57,11 +58,13 @@ export default function NewsPage() {
     }
   };
 
-  const inferCategory = (text: string): string => {
-    const lower = text.toLowerCase();
-    if (lower.includes('crypto') || lower.includes('bitcoin') || lower.includes('ethereum')) return 'crypto';
-    if (lower.includes('tech') || lower.includes('apple') || lower.includes('microsoft') || lower.includes('nvidia') || lower.includes('tesla')) return 'tech';
-    if (lower.includes('economy') || lower.includes('fed') || lower.includes('interest') || lower.includes('inflation')) return 'economy';
+  const inferCategory = (text: string, sourceName: string): string => {
+    const lowerText = text.toLowerCase();
+    const lowerSource = sourceName.toLowerCase();
+    if (lowerSource.includes('reddit') || lowerSource.includes('seeking alpha') || lowerSource.includes('stocktwits')) return 'forums';
+    if (lowerText.includes('crypto') || lowerText.includes('bitcoin') || lowerText.includes('ethereum')) return 'crypto';
+    if (lowerText.includes('tech') || lowerText.includes('apple') || lowerText.includes('microsoft') || lowerText.includes('nvidia') || lowerText.includes('tesla')) return 'tech';
+    if (lowerText.includes('economy') || lowerText.includes('fed') || lowerText.includes('interest') || lowerText.includes('inflation')) return 'economy';
     return 'markets';
   };
 
