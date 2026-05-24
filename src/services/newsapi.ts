@@ -158,6 +158,50 @@ const MOCK_NEWS_DATA: NewsArticle[] = [
     publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     content: 'AI adoption among large corporations has accelerated dramatically over the past year...',
     sentiment: 'positive'
+  },
+  {
+    source: { id: null, name: 'Reddit r/investing' },
+    author: 'u/investing_guru',
+    title: 'My 2024 Portfolio Performance Update and Lessons Learned',
+    description: 'A community member shares their 2024 portfolio performance, including wins, losses, and key investment lessons.',
+    url: 'https://reddit.com/r/investing/comments/abc123/my-2024-portfolio-performance/',
+    urlToImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800',
+    publishedAt: new Date(Date.now() - 26 * 60 * 60 * 1000).toISOString(),
+    content: 'Hey r/investing! Just wanted to share my portfolio performance for 2024 so far...',
+    sentiment: 'neutral'
+  },
+  {
+    source: { id: null, name: 'Reddit r/wallstreetbets' },
+    author: 'u/diamond_hands_420',
+    title: 'WE LIKE THE STOCK: GME Update and Discussion Thread',
+    description: 'The latest discussion on GameStop, including technical analysis and community sentiment.',
+    url: 'https://reddit.com/r/wallstreetbets/comments/def456/we-like-the-stock-gme-update/',
+    urlToImage: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
+    publishedAt: new Date(Date.now() - 28 * 60 * 60 * 1000).toISOString(),
+    content: 'DIAMOND HANDS ONLY 💎🙌 GME TO THE MOON 🚀',
+    sentiment: 'positive'
+  },
+  {
+    source: { id: null, name: 'Seeking Alpha' },
+    author: 'Market Analyst',
+    title: 'NVIDIA Stock: Is the Rally Sustainable? A Deep Dive',
+    description: 'A comprehensive analysis of NVIDIA\'s current valuation, growth prospects, and potential risks.',
+    url: 'https://seekingalpha.com/article/789012-nvda-stock-is-the-rally-sustainable',
+    urlToImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800',
+    publishedAt: new Date(Date.now() - 30 * 60 * 60 * 1000).toISOString(),
+    content: 'NVIDIA has had an incredible run, but is the stock now overvalued? Let\'s take a deep dive...',
+    sentiment: 'neutral'
+  },
+  {
+    source: { id: null, name: 'StockTwits' },
+    author: '@stocktraderpro',
+    title: 'TSLA breaking out! Watch this level closely',
+    description: 'Real-time market commentary on Tesla\'s price action and key technical levels.',
+    url: 'https://stocktwits.com/stocktraderpro/message/123456789',
+    urlToImage: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
+    publishedAt: new Date(Date.now() - 32 * 60 * 60 * 1000).toISOString(),
+    content: '$TSLA looking strong! Watching $250 resistance level closely. Breakout incoming? 🚀',
+    sentiment: 'positive'
   }
 ];
 
@@ -165,7 +209,8 @@ const generateMoreMockNews = (count: number): NewsArticle[] => {
   const sources = [
     'Bloomberg', 'Reuters', 'CNBC', 'Financial Times', 'Wall Street Journal', 
     'MarketWatch', 'Forbes', 'CoinDesk', 'CryptoSlate', 'Yahoo Finance',
-    'BBC Business', 'The Economist', 'Fortune', 'Business Insider'
+    'BBC Business', 'The Economist', 'Fortune', 'Business Insider',
+    'Reddit r/investing', 'Reddit r/wallstreetbets', 'Seeking Alpha', 'StockTwits'
   ];
   const authors = [
     'Sarah Johnson', 'Michael Chen', 'Emily Rodriguez', 'David Wilson', 
